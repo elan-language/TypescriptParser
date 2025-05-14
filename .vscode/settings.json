@@ -1,0 +1,10 @@
+{
+    "antlr4.generation": {
+        "alternativeJar": "./antlr-4.13.2-complete.jar",
+        "mode": "external",
+        "language": "TypeScript",
+        "listeners": true,
+        "visitors": true,
+        "outputDir": "./generated"
+    },
+}
