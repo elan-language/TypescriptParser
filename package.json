@@ -15,7 +15,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "antlr4": "^4.13.2",
-    "antlr4ts": "^0.5.0-alpha.4"
+    "antlr4": "^4.13.2"
   }
 }
