@@ -9,3 +9,5 @@ const lexer = new ElanLexer(chars);
 const tokens = new CommonTokenStream(lexer);
 const parser = new ElanParser(tokens);
 const tree = parser.expression();
+
+export ElanLexer;

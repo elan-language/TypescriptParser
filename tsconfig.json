@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
-		"moduleResolution": "bundler",
-		"target": "ES2024",
+		"module": "ES2020",
+		"moduleResolution": "Node",
+		"target": "ES6",
 		"outDir": "out/src",
 		"lib": [
-			"ES2024"
+			"ES2020"
 		],
 		"sourceMap": true,
 		"rootDir": "src",

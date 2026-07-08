@@ -1,18 +1,19 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
-		"moduleResolution": "bundler",
-		"target": "ES2024",
+		"module": "ES2020",
+		"moduleResolution": "Node",
+		"target": "ES6",
 		"rootDir": "..",
 		"outDir": "../out/",
 		"lib": [
-			"ES2024"
+			"ES2020"
 		],
 		"types" : ["mocha", "node"],
 		"sourceMap": true,
 		"resolveJsonModule": true,
 		"experimentalDecorators": true,
     	"emitDecoratorMetadata": true,
+		"allowSyntheticDefaultImports": true,
 		"strict": true   /* enable all strict type-checking options */
 		/* Additional Checks */
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
