@@ -1,11 +1,12 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
-		"target": "ESNext",
+		"module": "commonjs",
+		"moduleResolution": "bundler",
+		"target": "ES2024",
 		"rootDir": "..",
 		"outDir": "../out/",
 		"lib": [
-			"ESNext"
+			"ES2024"
 		],
 		"types" : ["mocha", "node"],
 		"sourceMap": true,

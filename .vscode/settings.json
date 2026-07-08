@@ -5,6 +5,6 @@
         "language": "TypeScript",
         "listeners": true,
         "visitors": true,
-        "outputDir": "./generated"
+        "outputDir": "./src/generated"
     },
 }

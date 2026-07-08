@@ -1,6 +1,6 @@
 import { CharStream, CommonTokenStream }  from 'antlr4';
-import ElanLexer from '../generated/ElanLexer';
-import ElanParser from '../generated/ElanParser';
+import ElanLexer from './generated/ElanLexer';
+import ElanParser from './generated/ElanParser';
 
 
 const input = "your text to parse here"
