@@ -245,7 +245,7 @@ immutableClass
 abstractImmutableClass
 inherits
 property
-constructor
+econstructor
 newInstance
 withClause
 proceduralControlFlow

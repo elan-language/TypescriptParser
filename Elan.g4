@@ -97,7 +97,7 @@ classDef: mutableClass | abstractClass| immutableClass | abstractImmutableClass;
 
 mutableClass: 
 	NL CLASS TYPENAME inherits?
-	constructor
+	econstructor
     (NL property | functionDef | procedureDef )*	
     NL END CLASS
 	;
@@ -110,7 +110,7 @@ abstractClass:
 
 immutableClass: 
 	NL IMMUTABLE CLASS TYPENAME inherits?
-	constructor
+	econstructor
     (NL property | functionDef)*
     NL END CLASS 
 	;
@@ -125,7 +125,7 @@ inherits: INHERITS type (COMMA type)*;
 
 property: PRIVATE? PROPERTY IDENTIFIER type; 
 
-constructor: 
+econstructor: 
 	NL CONSTRUCTOR OPEN_BRACKET parameterList? CLOSE_BRACKET
     statementBlock
 	NL END CONSTRUCTOR
