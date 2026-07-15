@@ -1,0 +1,60 @@
+lexer grammar RefLang_Lexer;
+
+// Keywords
+ABSTRACT:      'abstract';
+AND:           'and';
+AS:			   'as';
+ASSERT:		   'assert';
+ASSIGN:        'assign';
+BE:			   'be';
+CALL:		   'call';
+CATCH:         'catch';
+CLASS:         'class';
+CONSTANT:      'constant';
+CONSTRUCTOR:   'constructor';
+COPY:		   'copy';
+DIV: 		   'div';
+ELSE:          'else';
+END:		   'end'; 
+ENUM:          'enum';
+EVALUATES:     'evaluates';
+FOR:           'for';
+FROM:		   'from';
+FUNCTION:	   'function';
+IF:            'if'; 
+IN:            'in';
+INHERITS:      'inherits';
+INPUT:         'input';
+IS:            'is';
+ISNT:          'isnt';
+LAMBDA:		   'lambda';
+LET:           'let';
+MAIN:		   'main';
+MOD:           'mod';
+NEW:		   'new';
+NOT:           'not';
+OF:			   'of';
+OR:            'or';
+PRINT:		   'print';
+PRIVATE:       'private';
+PROCEDURE:	   'procedure';
+PROPERTY:      'property';
+RETURN:        'return';
+RETURNS:       'returns';
+SET:	 	   'set';
+STEP:		   'step';
+TEST:		   'test';
+THEN: 		   'then';
+THIS: 		   'this';
+THROW:		   'throw';
+TO:			   'to';
+TRY:           'try';
+VARIABLE:	   'variable';
+WHILE:         'while';
+
+COMMENT_MARKER: '#';
+
+TRUE:           'true';
+FALSE:          'false';
+
+ARROW:          '=>';
