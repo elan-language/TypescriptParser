@@ -70,12 +70,11 @@ XOR:                   'xor';
 BOOL_VALUE: 'true' | 'false';
 
 // Types
-VALUE_TYPE:   'Int' | 'Float' | 'String' | 'Boolean' ;
+VALUE_TYPE:   'Int' | 'Float' | 'Char' | 'String' | 'Bool' ;
 ARRAY: 'Array';
 LIST:  'List';
 DICTIONARY: 'Dictionary';
 ITERABLE: 'Iter';
-FUNC: 'Func';
 
 //Operators And Punctuators
 EQUALS:					  '=';

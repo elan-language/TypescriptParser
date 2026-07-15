@@ -279,7 +279,7 @@ logicalOp: AND | OR | XOR;
 conditionalOp: GT | LT | GE | LE | IS | IS_NOT;
 
 // TYPES
-type:  VALUE_TYPE | TYPENAME | TYPENAME genericSpecifier | tupleType |  funcType;
+type: VALUE_TYPE | TYPENAME | TYPENAME genericSpecifier | tupleType | funcType;
 
 dataStructureType: (ARRAY | LIST | DICTIONARY | ITERABLE ) genericSpecifier;
 
@@ -289,5 +289,4 @@ tupleType: OPEN_BRACKET type (COMMA type)+ CLOSE_BRACKET;
 
 typeList: type (COMMA type)*;
     
-funcType: FUNC LT OF typeList ARROW type GT; 
-
+funcType: 'Func' LT OF typeList ARROW type GT;
