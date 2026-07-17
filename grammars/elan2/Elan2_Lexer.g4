@@ -21,7 +21,6 @@ ELIF:          'elif';
 ELSE:          'else';
 END:		   'end'; 
 ENUM:          'enum';
-EVALUATES:     'evaluates';
 FOR:           'for';
 FROM:		   'from';
 FUNCTION:	   'function';
@@ -61,9 +60,7 @@ STRING_NAME:    'String';
 LIST_NAME:      'List';
 
 COMMENT: '#' ~( '\r' | '\n' )*;
-
-TRUE:           'true';
-FALSE:          'false';
+LIT_BOOLEAN:    'true' | 'false'; // In other langs, the casing may be different
 
 EQUAL:          'is';
 NOT_EQUAL:      'isnt';
