@@ -2,7 +2,7 @@ grammar Elan2;
 import Elan2_Lexer;
 
 // START Elan2_Frames
-file: global* NL* EOF;
+file: COMMENT? global* NL* EOF;
 
 // Globals
 global:

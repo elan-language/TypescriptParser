@@ -26,8 +26,6 @@ IF:            'if';
 IN:            'in';
 INHERITS:      'inherits';
 INPUT:         'input';
-IS:            'is';
-ISNT:          'isnt';
 LAMBDA:		   'lambda';
 LET:           'let';
 MAIN:		   'main';
@@ -58,8 +56,8 @@ COMMENT: '#' ~( '\r' | '\n' )*;
 TRUE:           'true';
 FALSE:          'false';
 
-EQUAL:          IS;
-NOT_EQUAL:      ISNT;
+EQUAL:          'is';
+NOT_EQUAL:      'isnt';
 ARROW:          '=>';
 
 THIS_INSTANCE:  THIS;
