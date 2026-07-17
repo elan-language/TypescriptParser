@@ -98,7 +98,8 @@ constructor:
 
 functionMethod:
     NL functionMethodTop
-        ordinaryStatement*
+        (letStatement | ordinaryStatement)*
+        returnStatement
     NL functionMethodBottom
     ;
 
