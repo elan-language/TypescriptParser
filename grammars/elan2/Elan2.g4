@@ -216,7 +216,7 @@ type: typeTuple | typeName | typeGeneric ;
 
 enumValuesList:  identifier (COMMA identifier)*;
 
-procRef: (thisInstance DOT)? (identifier DOT)? methodName; 
+procRef: (thisInstance DOT)? (identifierWithOptIndexes DOT)? methodName; 
 
 assertActual: expression;
 // END Elan2_Fields
