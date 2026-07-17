@@ -44,12 +44,12 @@ procedure:
 
 concreteClass:
     NL GHOSTED? concreteClassTop
-        (constructor | property | functionMethod | procedureMethod | copyMethod)*
+        (constructor | property | functionMethod | procedureMethod | copyMethod | commentMember)*
     NL concreteClassBottom;
 
 abstractClass:
     NL GHOSTED? abstractClassTop
-        (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure)*
+        (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure | commentMember)*
     NL abstractClassBottom;
 
 commentGlobal:
@@ -179,7 +179,7 @@ tryStatementTop: TRY;
 tryStatementBottom: END TRY;
 
 // Members
-constructorTop: CONSTRUCTOR OPEN_BRACKET paramsList CLOSE_BRACKET;
+constructorTop: CONSTRUCTOR OPEN_BRACKET paramsList? CLOSE_BRACKET;
 constructorBottom: END CONSTRUCTOR;
 
 property: NL PROPERTY identifier AS type;
