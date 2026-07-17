@@ -204,7 +204,7 @@ type: typeTuple | typeName | typeGeneric ;
 
 enumValuesList:  identifier (COMMA identifier)*;
 
-procRef: (THIS_INSTANCE DOT)? (identifier DOT)? methodName; 
+procRef: (thisInstance DOT)? (identifier DOT)? methodName; 
 
 assertActual: expression;
 // END Elan2_Fields
@@ -218,11 +218,13 @@ enumValue: typeName DOT identifier;
 litRegExp:;
 litString: LITERAL_STRING | INTERPOLATED_STRING;
 
+thisInstance: THIS;
+
 index: OPEN_SQ_BRACKET expression CLOSE_SQ_BRACKET;
 
 identifierWithOptIndexes: identifier index*;
 
-propertyRef: THIS_INSTANCE DOT identifierWithOptIndexes;
+propertyRef: thisInstance DOT identifierWithOptIndexes;
 
 expression:
       newInstance
@@ -232,9 +234,8 @@ expression:
     | binaryExpression
     ;
 
-
 term:  
-    (THIS_INSTANCE | chainable) (DOT chainable)*
+    (thisInstance | chainable) (DOT chainable)*
     ; 
 
 chainable:

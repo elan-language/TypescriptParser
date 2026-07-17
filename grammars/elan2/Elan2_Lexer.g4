@@ -69,8 +69,6 @@ EQUAL:          'is';
 NOT_EQUAL:      'isnt';
 ARROW:          '=>';
 
-THIS_INSTANCE:  THIS;
-
 BINARY_PREFIX:  '0b';
 HEX_PREFIX:     '0x';
 INTERPOLATED_STRING_PREFIX: '$';
