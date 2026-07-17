@@ -1,6 +1,6 @@
 lexer grammar Elan2_Lexer;
 
-// LANGUAGE-SPECIFIC LEXER RULES
+// START RefLang_Lexer
 ABSTRACT:      'abstract';
 AND:           'and';
 AS:			   'as';
@@ -67,8 +67,9 @@ THIS_INSTANCE:  THIS;
 BINARY_PREFIX:  '0b';
 HEX_PREFIX:     '0x';
 INTERPOLATED_STRING_PREFIX: '$';
+// END RefLang_Lexer
 
-// Then Elan generic lexer rules
+// START ELAN2_Lexer:
 WS  :   [ \t]+ -> skip ;
 NL: [\r\n\f]+ ;
 
@@ -92,7 +93,7 @@ LE:                       	'<=';
 GE:                       	'>=';
 DOUBLE_QUOTES:			  	'"';
 
-IF_: 'if_'; // Temporary solution - to be replaced by language-specific syntax
+IF_: 'if_'; // Temporary solution - to be replaced by language-specific implementation
 
 NAME_STARTING_LC:			UnicodeClassLL IdentifierPartCharacter*;
 NAME_STARTING_UC:         UnicodeClassLU IdentifierPartCharacter*;
@@ -191,3 +192,4 @@ fragment HexDigit : [0-9] | [A-F] | [a-f];
 fragment UnicodeClassLU: '\u0041'..'\u005a';
 fragment UnicodeClassLL	: '\u0061'..'\u007A';
 fragment UnicodeClassND	: '\u0030'..'\u0039';
+// END Elan2_Lexer

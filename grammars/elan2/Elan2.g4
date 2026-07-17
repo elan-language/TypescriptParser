@@ -1,10 +1,10 @@
 grammar Elan2;
 import Elan2_Lexer;
 
-// Grammar
+// START Elan2_Frames
 file: global* NL* EOF;
 
-/* Globals */
+// Globals
 global:
 	  main
 	| function
@@ -57,7 +57,7 @@ commentGlobal:
     NL COMMENT
     ;  
 
-/* Statements */
+// Statements
 ordinaryStatement:
    print | variableDefinition | assignment | inputStatement | ifStatement | whileLoop | forLoop | procedureCall | tryStatement | throwStatement | commentStatement
    ;
@@ -90,7 +90,7 @@ tryStatement:
 
 commentStatement: NL COMMENT; 
 
-/* Members */
+// Members
 constructor:
     NL constructorTop
         ordinaryStatement*
@@ -116,8 +116,9 @@ copyMethod:
     ;
 
 commentMember: NL COMMENT?;
+// END Elan2_Frames
 
-// LANGUAGE-SPECIFIC INSTRUCTIONS:
+// START RefLang_Frames
 // Globals
 mainTop: MAIN;
 mainBottom: END MAIN;
@@ -183,8 +184,9 @@ copyMethodBottom: END COPY;
 
 abstractFunction: NL ABSTRACT functionTop;
 abstractProcedure: NL ABSTRACT procedureTop;
+// END RefLang_Frames
 
-// Elan2 fields
+// START Elan2_Fields
 identifier: NAME_STARTING_LC;
 assignable: identifierWithOptIndexes | propertyRef;
 
@@ -205,9 +207,9 @@ enumValuesList:  identifier (COMMA identifier)*;
 procRef: (THIS_INSTANCE DOT)? (identifier DOT)? methodName; 
 
 assertActual: expression;
+// END Elan2_Fields
 
-// ELAN2 NODES
-
+// START Elan2_SubNodes
 litValue: litBoolean | litInt | litFloat | litString | enumValue | litRegExp;
 litBoolean: TRUE | FALSE;
 litInt: LITERAL_INTEGER | (BINARY_PREFIX LITERAL_BINARY) | (HEX_PREFIX LITERAL_HEX);
@@ -250,9 +252,9 @@ binaryOperator:
   MULT | DIVIDE | PLUS | MINUS | AND | OR | MOD;
      
 ifExpression: IF_ OPEN_BRACKET expression COMMA expression COMMA expression CLOSE_BRACKET;
+// END Elan2_SubNodes
 
-// LANGUAGE-SPECIFIC NODES
-
+// START RefLang_SubNodes
 newInstance:  NEW type OPEN_BRACKET argList CLOSE_BRACKET;
 
 paramDef: identifier AS type;
@@ -272,3 +274,4 @@ segment: textSegment | fieldSegment;
 textSegment: TEXT;
 
 fieldSegment: OPEN_BRACE expression CLOSE_BRACE;
+// END RefLang_SubNodes
