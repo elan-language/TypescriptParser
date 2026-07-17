@@ -122,13 +122,13 @@ commentMember: NL COMMENT?;
 mainTop: MAIN;
 mainBottom: END MAIN;
 
-functionTop: FUNCTION methodName OPEN_BRACKET paramsList CLOSE_BRACKET RETURNS type;
+functionTop: FUNCTION methodName OPEN_BRACKET paramsList? CLOSE_BRACKET RETURNS type;
 functionBottom: END FUNCTION;
 
 testTop: TEST testName;
 testBottom: END TEST;
 
-procedureTop: PROCEDURE methodName OPEN_BRACKET paramsList CLOSE_BRACKET; 
+procedureTop: PROCEDURE methodName OPEN_BRACKET paramsList? CLOSE_BRACKET; 
 procedureBottom: END PROCEDURE;
 
 concreteClassTop: CLASS typeName (INHERITS typeName)?; 
