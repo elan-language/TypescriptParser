@@ -29,7 +29,6 @@ IF:            'if';
 IN:            'in';
 INHERITS:      'inherits';
 INPUT:         'input';
-INPUTSTRING:   'inputString'; // pseudo-method
 LAMBDA:		   'lambda';
 LET:           'let';
 MAIN:		   'main';
@@ -103,6 +102,7 @@ DOUBLE_QUOTES:			  	'"';
 
 IF_: 'if_'; // Temporary solution - to be replaced by language-specific implementation
 
+NAME_STARTING_TEST_:         'test_' IdentifierPartCharacter*;
 NAME_STARTING_LC:			UnicodeClassLL IdentifierPartCharacter*;
 NAME_STARTING_UC:         UnicodeClassLU IdentifierPartCharacter*;
 

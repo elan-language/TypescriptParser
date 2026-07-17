@@ -126,7 +126,7 @@ mainBottom: END MAIN;
 functionTop: FUNCTION methodName OPEN_BRACKET paramsList CLOSE_BRACKET RETURNS type;
 functionBottom: END FUNCTION;
 
-testTop: TEST 'test_'testName; // TODO
+testTop: TEST testName;
 testBottom: END TEST;
 
 procedureTop: PROCEDURE methodName OPEN_BRACKET paramsList CLOSE_BRACKET; 
@@ -142,7 +142,7 @@ constant: NL CONSTANT identifier SET TO constantValue;
 enum: NL ENUM typeName enumValuesList;
 
 // Statements
-assert: NL ASSERT assertActual EVALUATES TO expression; 
+assert: NL ASSERT assertActual EQUAL expression; 
 letStatement: NL LET identifier BE expression;
 print: NL PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
 variableDefinition: NL VARIABLE identifier SET TO expression; 
@@ -191,7 +191,7 @@ identifier: NAME_STARTING_LC;
 assignable: identifierWithOptIndexes | propertyRef;
 
 methodName: NAME_STARTING_LC;
-testName: NAME_STARTING_LC | NAME_STARTING_UC;
+testName: NAME_STARTING_TEST_;
 typeName:  INT_NAME | FLOAT_NAME | BOOL_NAME | STRING_NAME | LIST_NAME | NAME_STARTING_UC;
 
 constantValue: litValue | identifier;
