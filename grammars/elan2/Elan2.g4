@@ -192,7 +192,7 @@ assignable: identifierWithOptIndexes | propertyRef;
 
 methodName: NAME_STARTING_LC;
 testName: NAME_STARTING_LC | NAME_STARTING_UC;
-typeName:  NAME_STARTING_UC;
+typeName:  INT_NAME | FLOAT_NAME | BOOL_NAME | STRING_NAME | LIST_NAME | NAME_STARTING_UC;
 
 constantValue: litValue | identifier;
 
