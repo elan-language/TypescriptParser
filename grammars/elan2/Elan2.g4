@@ -147,7 +147,7 @@ letStatement: NL LET identifier BE expression;
 print: NL PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
 variableDefinition: NL VARIABLE identifier SET TO expression; 
 assignment: NL ASSIGN assignable TO expression; 
-inputStatement: NL INPUT identifier SET TO 'inputString' OPEN_BRACKET argList CLOSE_BRACKET; 
+inputStatement: NL INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET; 
 procedureCall: NL CALL procRef OPEN_BRACKET argList CLOSE_BRACKET;
 throwStatement: NL THROW typeName litString; // TODO: currently has typeNameUse 
 returnStatement: NL RETURN expression; 
@@ -216,7 +216,7 @@ litInt: LITERAL_INTEGER | (BINARY_PREFIX LITERAL_BINARY) | (HEX_PREFIX LITERAL_H
 litFloat: LITERAL_FLOAT;
 enumValue: typeName DOT identifier;
 litRegExp:;
-litString: LITERAL_STRING |  interpolatedString;
+litString: LITERAL_STRING | INTERPOLATED_STRING;
 
 index: OPEN_SQ_BRACKET expression CLOSE_SQ_BRACKET;
 

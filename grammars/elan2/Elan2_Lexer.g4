@@ -1,5 +1,8 @@
 lexer grammar Elan2_Lexer;
 
+// TODO: need to have reserved words from ALL langs defined in Lexer to test that we aren't unknowingly using them somewhere else
+// e.g. use of 'set' for a method name
+
 // START RefLang_Lexer
 ABSTRACT:      'abstract';
 AND:           'and';
@@ -26,6 +29,7 @@ IF:            'if';
 IN:            'in';
 INHERITS:      'inherits';
 INPUT:         'input';
+INPUTSTRING:   'inputString'; // pseudo-method
 LAMBDA:		   'lambda';
 LET:           'let';
 MAIN:		   'main';
@@ -50,6 +54,12 @@ TO:			   'to';
 TRY:           'try';
 VARIABLE:	   'variable';
 WHILE:         'while';
+
+INT_NAME:       'Int';
+FLOAT_NAME:     'Float';
+BOOL_NAME:      'Boolean';
+STRING_NAME:    'String';
+LIST_NAME:      'List';
 
 COMMENT: '#' ~( '\r' | '\n' )*;
 
@@ -100,6 +110,7 @@ LITERAL_INTEGER:     	[0-9] [0-9]*;
 LITERAL_BINARY: 		[01]+;
 LITERAL_HEX: 			[0-9A-Fa-f]+;
 LITERAL_FLOAT:        	LITERAL_INTEGER DOT LITERAL_INTEGER ExponentPart?;
+INTERPOLATED_STRING:     INTERPOLATED_STRING_PREFIX '"'  (~["\u0085] | CommonCharacter)* '"'; // This must precede LITERAL_STRING
 LITERAL_STRING:         '"'  (~["\u0085] | CommonCharacter)* '"';
 
 WHITESPACES:   (Whitespace)+  -> skip;
