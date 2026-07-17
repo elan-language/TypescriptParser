@@ -104,9 +104,10 @@ NAME_STARTING_TEST_:         'test_' IdentifierPartCharacter*;
 NAME_STARTING_LC:			UnicodeClassLL IdentifierPartCharacter*;
 NAME_STARTING_UC:         UnicodeClassLU IdentifierPartCharacter*;
 
+LITERAL_BINARY: 		BINARY_PREFIX [01]+;
+LITERAL_HEX: 			HEX_PREFIX [0-9A-Fa-f]+;
 LITERAL_INTEGER:     	[0-9] [0-9]*;
-LITERAL_BINARY: 		[01]+;
-LITERAL_HEX: 			[0-9A-Fa-f]+;
+
 LITERAL_FLOAT:        	LITERAL_INTEGER DOT LITERAL_INTEGER ExponentPart?;
 INTERPOLATED_STRING:     INTERPOLATED_STRING_PREFIX '"'  (~["\u0085] | CommonCharacter)* '"'; 
 // INTERPOLATED_STRING - a temp kludge pending full node-parsing of interpolated string - must precede:

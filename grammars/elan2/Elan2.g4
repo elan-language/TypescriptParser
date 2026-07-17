@@ -212,7 +212,7 @@ assertActual: expression;
 // START Elan2_SubNodes
 litValue: litBoolean | litInt | litFloat | litString | enumValue | litRegExp;
 litBoolean: TRUE | FALSE;
-litInt: LITERAL_INTEGER | (BINARY_PREFIX LITERAL_BINARY) | (HEX_PREFIX LITERAL_HEX);
+litInt: LITERAL_INTEGER | LITERAL_BINARY | LITERAL_HEX;
 litFloat: LITERAL_FLOAT;
 enumValue: typeName DOT identifier;
 litRegExp:;
