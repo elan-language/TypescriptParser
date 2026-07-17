@@ -108,20 +108,20 @@ constructor:
     ;
 
 functionMethod:
-    NL GHOSTED? functionMethodTop
+    NL GHOSTED? PRIVATE? functionMethodTop
         (letStatement | ordinaryStatement)*
         returnStatement
     NL functionMethodBottom
     ;
 
 procedureMethod:
-    NL GHOSTED? procedureMethodTop
+    NL GHOSTED? PRIVATE?  procedureMethodTop
         ordinaryStatement*
     NL procedureMethodBottom
     ;
 
 copyMethod:
-    NL GHOSTED? copyMethodTop
+    NL GHOSTED? PRIVATE? copyMethodTop
         ordinaryStatement*
         returnStatement
     NL copyMethodBottom
@@ -183,7 +183,7 @@ tryStatementBottom: END TRY;
 constructorTop: CONSTRUCTOR OPEN_BRACKET paramsList? CLOSE_BRACKET;
 constructorBottom: END CONSTRUCTOR;
 
-property: NL PROPERTY identifier AS type;
+property: NL PRIVATE? PROPERTY identifier AS type;
 
 functionMethodTop: functionTop;
 functionMethodBottom: functionBottom;
