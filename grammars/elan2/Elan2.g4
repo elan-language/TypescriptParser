@@ -44,8 +44,7 @@ procedure:
 
 concreteClass:
     NL concreteClassTop
-        constructor
-        (property | functionMethod | procedureMethod | copyMethod)*
+        (constructor | property | functionMethod | procedureMethod | copyMethod)*
     NL concreteClassBottom;
 
 abstractClass:
