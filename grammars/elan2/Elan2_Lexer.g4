@@ -110,7 +110,8 @@ LITERAL_INTEGER:     	[0-9] [0-9]*;
 LITERAL_BINARY: 		[01]+;
 LITERAL_HEX: 			[0-9A-Fa-f]+;
 LITERAL_FLOAT:        	LITERAL_INTEGER DOT LITERAL_INTEGER ExponentPart?;
-INTERPOLATED_STRING:     INTERPOLATED_STRING_PREFIX '"'  (~["\u0085] | CommonCharacter)* '"'; // This must precede LITERAL_STRING
+INTERPOLATED_STRING:     INTERPOLATED_STRING_PREFIX '"'  (~["\u0085] | CommonCharacter)* '"'; 
+// INTERPOLATED_STRING - a temp kludge pending full node-parsing of interpolated string - must precede:
 LITERAL_STRING:         '"'  (~["\u0085] | CommonCharacter)* '"';
 
 WHITESPACES:   (Whitespace)+  -> skip;
