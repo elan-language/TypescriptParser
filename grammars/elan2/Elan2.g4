@@ -123,6 +123,7 @@ procedureMethod:
 copyMethod:
     NL GHOSTED? copyMethodTop
         ordinaryStatement*
+        returnStatement
     NL copyMethodBottom
     ;
 
