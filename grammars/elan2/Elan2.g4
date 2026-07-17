@@ -83,7 +83,7 @@ tryStatement:
     NL tryStatementTop
         ordinaryStatement*
         catchStatement
-        ordinaryStatement
+        ordinaryStatement*
     NL tryStatementBottom
     ;
 
@@ -153,7 +153,7 @@ throwStatement: NL THROW typeName litString; // TODO: currently has typeNameUse
 returnStatement: NL RETURN expression; 
 elseIfClause:NL ELIF expression THEN;
 elseClause: NL ELSE; // TODO
-catchStatement: NL CATCH identifier AS expression;
+catchStatement: NL CATCH identifier AS typeName;
 
 ifStatementTop: IF expression THEN;
 ifStatementBottom: END IF;
