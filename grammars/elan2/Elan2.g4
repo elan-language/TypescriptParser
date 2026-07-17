@@ -143,7 +143,7 @@ enum: NL ENUM typeName enumValuesList;
 
 // Statements
 assert: NL ASSERT assertActual EVALUATES TO expression; 
-letStatement: NL identifier LET BE expression;
+letStatement: NL LET identifier BE expression;
 print: NL PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
 variableDefinition: NL VARIABLE identifier SET TO expression; 
 assignment: NL ASSIGN assignable TO expression; 
