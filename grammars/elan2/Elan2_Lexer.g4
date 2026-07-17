@@ -116,6 +116,8 @@ LITERAL_STRING:         '"'  (~["\u0085] | CommonCharacter)* '"';
 WHITESPACES:   (Whitespace)+  -> skip;
 TEXT: CommonCharacter+;
 
+GHOSTED: '[ghosted]';
+
 fragment InputCharacter: ~[\r\n\u0085];
 
 fragment NewLineCharacter

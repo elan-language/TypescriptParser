@@ -18,37 +18,37 @@ global:
     ; 
 
 main: 
-    NL mainTop
+    NL GHOSTED? mainTop
        ordinaryStatement*
     NL mainBottom
     ;
 
 function: 
-    NL functionTop
+    NL GHOSTED? functionTop
         (letStatement | ordinaryStatement)* /* statements with side-effects prevented by editor and/or compiler */
         returnStatement
     NL functionBottom
     ;
 
 test: 
-    NL testTop
+    NL GHOSTED? testTop
         (assert | letStatement | variableDefinition | commentStatement)*
     NL testBottom
     ;
 
 procedure: 
-    NL procedureTop
+    NL GHOSTED? procedureTop
         ordinaryStatement*
     NL procedureBottom
     ;
 
 concreteClass:
-    NL concreteClassTop
+    NL GHOSTED? concreteClassTop
         (constructor | property | functionMethod | procedureMethod | copyMethod)*
     NL concreteClassBottom;
 
 abstractClass:
-    NL abstractClassTop
+    NL GHOSTED? abstractClassTop
         (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure)*
     NL abstractClassBottom;
 
@@ -58,29 +58,39 @@ commentGlobal:
 
 // Statements
 ordinaryStatement:
-   print | variableDefinition | assignment | inputStatement | ifStatement | whileLoop | forLoop | procedureCall | tryStatement | throwStatement | commentStatement
+    print 
+   | variableDefinition 
+   | assignment 
+   | inputStatement 
+   | ifStatement 
+   | whileLoop 
+   | forLoop 
+   | procedureCall 
+   | tryStatement 
+   | throwStatement 
+   | commentStatement
    ;
    
 ifStatement:
-    NL ifStatementTop
+    NL GHOSTED? ifStatementTop
         (elseIfClause | elseClause | ordinaryStatement)*
     NL ifStatementBottom
     ;
 
 whileLoop:
-    NL whileLoopTop
+    NL GHOSTED? whileLoopTop
        ordinaryStatement*
     NL whileLoopBottom
     ;
 
 forLoop:
-    NL forLoopTop
+    NL GHOSTED? forLoopTop
        ordinaryStatement*
     NL forLoopBottom
     ;
 
 tryStatement:
-    NL tryStatementTop
+    NL GHOSTED? tryStatementTop
         ordinaryStatement*
         catchStatement
         ordinaryStatement*
@@ -91,26 +101,27 @@ commentStatement: NL COMMENT;
 
 // Members
 constructor:
-    NL constructorTop
+
+    NL GHOSTED? constructorTop
         ordinaryStatement*
     NL constructorBottom
     ;
 
 functionMethod:
-    NL functionMethodTop
+    NL GHOSTED? functionMethodTop
         (letStatement | ordinaryStatement)*
         returnStatement
     NL functionMethodBottom
     ;
 
 procedureMethod:
-    NL procedureMethodTop
+    NL GHOSTED? procedureMethodTop
         ordinaryStatement*
     NL procedureMethodBottom
     ;
 
 copyMethod:
-    NL copyMethodTop
+    NL GHOSTED? copyMethodTop
         ordinaryStatement*
     NL copyMethodBottom
     ;
@@ -138,22 +149,22 @@ concreteClassBottom: END CLASS;
 abstractClassTop: ABSTRACT CLASS typeName (INHERITS typeName)?;  
 abstractClassBottom: END ABSTRACT CLASS;
 
-constant: NL CONSTANT identifier SET TO constantValue;
-enum: NL ENUM typeName enumValuesList;
+constant: NL GHOSTED? CONSTANT identifier SET TO constantValue;
+enum: NL GHOSTED? ENUM typeName enumValuesList;
 
 // Statements
-assert: NL ASSERT assertActual EQUAL expression; 
-letStatement: NL LET identifier BE expression;
-print: NL PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
-variableDefinition: NL VARIABLE identifier SET TO expression; 
-assignment: NL ASSIGN assignable TO expression; 
-inputStatement: NL INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET; 
-procedureCall: NL CALL procRef OPEN_BRACKET argList CLOSE_BRACKET;
-throwStatement: NL THROW typeName litString; // TODO: currently has typeNameUse 
-returnStatement: NL RETURN expression; 
-elseIfClause:NL ELIF expression THEN;
-elseClause: NL ELSE; // TODO
-catchStatement: NL CATCH identifier AS typeName;
+assert: NL GHOSTED? ASSERT assertActual EQUAL expression; 
+letStatement: NL GHOSTED? LET identifier BE expression;
+print: NL GHOSTED? PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
+variableDefinition: NL GHOSTED? VARIABLE identifier SET TO expression; 
+assignment: NL GHOSTED? ASSIGN assignable TO expression; 
+inputStatement: NL GHOSTED? INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET; 
+procedureCall: NL GHOSTED? CALL procRef OPEN_BRACKET argList CLOSE_BRACKET;
+throwStatement: NL GHOSTED? THROW typeName litString; // TODO: currently has typeNameUse 
+returnStatement: NL RETURN expression; // not ghostable
+elseIfClause:NL GHOSTED? ELIF expression THEN;
+elseClause: NL GHOSTED? ELSE; // TODO
+catchStatement: NL GHOSTED? CATCH identifier AS typeName;
 
 ifStatementTop: IF expression THEN;
 ifStatementBottom: END IF;
@@ -182,8 +193,8 @@ procedureMethodBottom: procedureBottom;
 copyMethodTop: COPY methodName OPEN_BRACKET paramsList CLOSE_BRACKET RETURNS type;
 copyMethodBottom: END COPY;
 
-abstractFunction: NL ABSTRACT functionTop;
-abstractProcedure: NL ABSTRACT procedureTop;
+abstractFunction: NL GHOSTED? ABSTRACT functionTop;
+abstractProcedure: NL GHOSTED? ABSTRACT procedureTop;
 // END RefLang_Frames
 
 // START Elan2_Fields
