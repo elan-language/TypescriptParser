@@ -227,25 +227,33 @@ propertyRef: THIS_INSTANCE DOT identifierWithOptIndexes;
 expression:
       newInstance
     | ifExpression
+    | unaryExpression
     | term
-    | (MINUS | NOT) term
-    | term binaryOperator expression
+    | binaryExpression
     ;
-  
+
+
 term:  
     (THIS_INSTANCE | chainable) (DOT chainable)*
     ; 
 
 chainable:
     (
-    ( OPEN_BRACKET expression CLOSE_BRACKET)
-    | identifier
+      identifier
+    | methodCall
+    | bracketedExpression
+    | tuple
     | litValue
     | list
-    | methodName OPEN_BRACKET argList CLOSE_BRACKET
     )
     index*
     ;
+
+bracketedExpression: OPEN_BRACKET expression CLOSE_BRACKET;
+unaryExpression: (MINUS | NOT) term;
+binaryExpression: term binaryOperator expression; // ? expression binaryOperator expression ?
+tuple: OPEN_BRACKET expression COMMA expression (COMMA expression)* CLOSE_BRACKET;
+methodCall: methodName OPEN_BRACKET argList CLOSE_BRACKET;
 
 binaryOperator: 
   EQUAL | NOT_EQUAL | GT | LT | GE | LE |
