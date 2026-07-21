@@ -18,42 +18,42 @@ global:
     ; 
 
 main: 
-    NL GHOSTED? mainTop
+    GHOSTED? mainTop NL
        ordinaryStatement*
-    NL mainBottom
+    mainBottom NL
     ;
 
 function: 
-    NL GHOSTED? functionTop
+    GHOSTED? functionTop NL
         (letStatement | ordinaryStatement)* /* statements with side-effects prevented by editor and/or compiler */
         returnStatement
-    NL functionBottom
+    functionBottom NL
     ;
 
 test: 
-    NL GHOSTED? testTop
+    GHOSTED? testTop NL
         (assert | letStatement | variableDefinition | commentStatement)*
-    NL testBottom
+    testBottom NL
     ;
 
 procedure: 
-    NL GHOSTED? procedureTop
+     GHOSTED? procedureTop NL
         ordinaryStatement*
-    NL procedureBottom
+    procedureBottom NL
     ;
 
 concreteClass:
-    NL GHOSTED? concreteClassTop
+    GHOSTED? concreteClassTop NL
         (constructor | property | functionMethod | procedureMethod | copyMethod | commentMember)*
-    NL concreteClassBottom;
+    concreteClassBottom NL;
 
 abstractClass:
-    NL GHOSTED? abstractClassTop
+    GHOSTED? abstractClassTop NL
         (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure | commentMember)*
-    NL abstractClassBottom;
+    abstractClassBottom NL;
 
 commentGlobal:
-    NL COMMENT
+    COMMENT NL
     ;  
 
 // Statements
@@ -72,62 +72,62 @@ ordinaryStatement:
    ;
    
 ifStatement:
-    NL GHOSTED? ifStatementTop
+    GHOSTED? ifStatementTop NL
         (elseIfClause | elseClause | ordinaryStatement)*
-    NL ifStatementBottom
+    ifStatementBottom NL
     ;
 
 whileLoop:
-    NL GHOSTED? whileLoopTop
+    GHOSTED? whileLoopTop NL
        ordinaryStatement*
-    NL whileLoopBottom
+    whileLoopBottom NL
     ;
 
 forLoop:
-    NL GHOSTED? forLoopTop
+    GHOSTED? forLoopTop NL
        ordinaryStatement*
-    NL forLoopBottom
+    forLoopBottom NL
     ;
 
 tryStatement:
-    NL GHOSTED? tryStatementTop
+    GHOSTED? tryStatementTop NL
         ordinaryStatement*
         catchStatement
         ordinaryStatement*
-    NL tryStatementBottom
+    tryStatementBottom NL
     ;
 
-commentStatement: NL COMMENT; 
+commentStatement: COMMENT NL; 
 
 // Members
 constructor:
 
-    NL GHOSTED? constructorTop
+    GHOSTED? constructorTop NL
         ordinaryStatement*
-    NL constructorBottom
+    constructorBottom NL
     ;
 
 functionMethod:
-    NL GHOSTED? PRIVATE? functionMethodTop
+    GHOSTED? PRIVATE? functionMethodTop NL
         (letStatement | ordinaryStatement)*
         returnStatement
-    NL functionMethodBottom
+    functionMethodBottom NL
     ;
 
 procedureMethod:
-    NL GHOSTED? PRIVATE?  procedureMethodTop
+    GHOSTED? PRIVATE?  procedureMethodTop NL
         ordinaryStatement*
-    NL procedureMethodBottom
+    procedureMethodBottom NL
     ;
 
 copyMethod:
-    NL GHOSTED? PRIVATE? copyMethodTop
+    GHOSTED? PRIVATE? copyMethodTop NL
         ordinaryStatement*
         returnStatement
-    NL copyMethodBottom
+    copyMethodBottom NL
     ;
 
-commentMember: NL COMMENT?;
+commentMember: COMMENT? NL;
 // END Elan2_Frames
 
 // START RefLang_Frames
@@ -150,22 +150,22 @@ concreteClassBottom: END CLASS;
 abstractClassTop: ABSTRACT CLASS typeName (INHERITS typeName)?;  
 abstractClassBottom: END ABSTRACT CLASS;
 
-constant: NL GHOSTED? CONSTANT identifier SET TO constantValue;
-enum: NL GHOSTED? ENUM typeName enumValuesList;
+constant: GHOSTED? CONSTANT identifier SET TO constantValue NL;
+enum: GHOSTED? ENUM typeName enumValuesList NL;
 
 // Statements
-assert: NL GHOSTED? ASSERT assertActual EQUAL expression; 
-letStatement: NL GHOSTED? LET identifier BE expression;
-print: NL GHOSTED? PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
-variableDefinition: NL GHOSTED? VARIABLE identifier SET TO expression; 
-assignment: NL GHOSTED? ASSIGN assignable TO expression; 
-inputStatement: NL GHOSTED? INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET; 
-procedureCall: NL GHOSTED? CALL procRef OPEN_BRACKET argList CLOSE_BRACKET;
-throwStatement: NL GHOSTED? THROW typeName litString; // TODO: currently has typeNameUse 
-returnStatement: NL RETURN expression; // not ghostable
-elseIfClause:NL GHOSTED? ELIF expression THEN;
-elseClause: NL GHOSTED? ELSE; // TODO
-catchStatement: NL GHOSTED? CATCH identifier AS typeName;
+assert: GHOSTED? ASSERT assertActual EQUAL expression NL; 
+letStatement: GHOSTED? LET identifier BE expression NL;
+print: GHOSTED? PRINT OPEN_BRACKET argList CLOSE_BRACKET NL; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
+variableDefinition: GHOSTED? VARIABLE identifier SET TO expression NL; 
+assignment: GHOSTED? ASSIGN assignable TO expression NL; 
+inputStatement: GHOSTED? INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET NL; 
+procedureCall: GHOSTED? CALL procRef OPEN_BRACKET argList CLOSE_BRACKET NL;
+throwStatement: GHOSTED? THROW typeName litString NL; // TODO: currently has typeNameUse 
+returnStatement: RETURN expression NL; // not ghostable
+elseIfClause: GHOSTED? ELIF expression THEN NL;
+elseClause: GHOSTED? ELSE NL; // TODO
+catchStatement: GHOSTED? CATCH identifier AS typeName NL;
 
 ifStatementTop: IF expression THEN;
 ifStatementBottom: END IF;
@@ -183,7 +183,7 @@ tryStatementBottom: END TRY;
 constructorTop: CONSTRUCTOR OPEN_BRACKET paramsList? CLOSE_BRACKET;
 constructorBottom: END CONSTRUCTOR;
 
-property: NL PRIVATE? PROPERTY identifier AS type;
+property: PRIVATE? PROPERTY identifier AS type NL;
 
 functionMethodTop: functionTop;
 functionMethodBottom: functionBottom;
@@ -194,8 +194,8 @@ procedureMethodBottom: procedureBottom;
 copyMethodTop: COPY methodName OPEN_BRACKET paramsList CLOSE_BRACKET RETURNS type;
 copyMethodBottom: END COPY;
 
-abstractFunction: NL GHOSTED? ABSTRACT functionTop;
-abstractProcedure: NL GHOSTED? ABSTRACT procedureTop;
+abstractFunction: GHOSTED? ABSTRACT functionTop;
+abstractProcedure: GHOSTED? ABSTRACT procedureTop;
 // END RefLang_Frames
 
 // START Elan2_Fields
