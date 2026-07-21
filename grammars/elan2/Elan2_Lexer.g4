@@ -21,6 +21,7 @@ ELIF:          'elif';
 ELSE:          'else';
 END:		   'end'; 
 ENUM:          'enum';
+EVALUATES:	   'evaluates';
 FOR:           'for';
 FROM:		   'from';
 FUNCTION:	   'function';
@@ -65,6 +66,7 @@ LIT_BOOLEAN:    'true' | 'false'; // In other langs, the casing may be different
 EQUAL:          'is';
 NOT_EQUAL:      'isnt';
 ARROW:          '=>';
+POWER:			'^';
 
 BINARY_PREFIX:  '0b';
 HEX_PREFIX:     '0x';

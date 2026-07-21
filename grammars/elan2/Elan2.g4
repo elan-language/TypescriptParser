@@ -37,14 +37,14 @@ test:
     ;
 
 procedure: 
-     GHOSTED? procedureTop NL
+    GHOSTED? procedureTop NL
         ordinaryStatement*
     procedureBottom NL
     ;
 
 concreteClass:
     GHOSTED? concreteClassTop NL
-        (constructor | property | functionMethod | procedureMethod | copyMethod | commentMember)*
+        (constructorMember | property | functionMethod | procedureMethod | copyMethod | commentMember)*
     concreteClassBottom NL;
 
 abstractClass:
@@ -58,17 +58,17 @@ commentGlobal:
 
 // Statements
 ordinaryStatement:
-    print 
-   | variableDefinition 
-   | assignment 
-   | inputStatement 
-   | ifStatement 
-   | whileLoop 
-   | forLoop 
-   | procedureCall 
-   | tryStatement 
-   | throwStatement 
-   | commentStatement
+      print 
+    | variableDefinition 
+    | assignment 
+    | inputStatement 
+    | ifStatement 
+    | whileLoop 
+    | forLoop 
+    | procedureCall 
+    | tryStatement 
+    | throwStatement 
+    | commentStatement
    ;
    
 ifStatement:
@@ -100,7 +100,7 @@ tryStatement:
 commentStatement: COMMENT NL; 
 
 // Members
-constructor:
+constructorMember:
 
     GHOSTED? constructorTop NL
         ordinaryStatement*
@@ -154,13 +154,13 @@ constant: GHOSTED? CONSTANT identifier SET TO constantValue NL;
 enum: GHOSTED? ENUM typeName enumValuesList NL;
 
 // Statements
-assert: GHOSTED? ASSERT assertActual EQUAL expression NL; 
+assert: GHOSTED? ASSERT assertActual EVALUATES TO expression NL; 
 letStatement: GHOSTED? LET identifier BE expression NL;
-print: GHOSTED? PRINT OPEN_BRACKET argList CLOSE_BRACKET NL; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
+print: GHOSTED? PRINT OPEN_BRACKET expression? CLOSE_BRACKET NL;
 variableDefinition: GHOSTED? VARIABLE identifier SET TO expression NL; 
 assignment: GHOSTED? ASSIGN assignable TO expression NL; 
-inputStatement: GHOSTED? INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET NL; 
-procedureCall: GHOSTED? CALL procRef OPEN_BRACKET argList CLOSE_BRACKET NL;
+inputStatement: GHOSTED? INPUT identifier SET TO methodName OPEN_BRACKET expression CLOSE_BRACKET NL; 
+procedureCall: GHOSTED? CALL term NL; // Compiler to check that term ends in a methodCall, and that the method is a procedure
 throwStatement: GHOSTED? THROW typeName litString NL; // TODO: currently has typeNameUse 
 returnStatement: RETURN expression NL; // not ghostable
 elseIfClause: GHOSTED? ELIF expression THEN NL;
@@ -216,17 +216,15 @@ type: typeTuple | typeName | typeGeneric ;
 
 enumValuesList:  identifier (COMMA identifier)*;
 
-procRef: (thisInstance DOT)? (identifierWithOptIndexes DOT)? methodName; 
-
 assertActual: expression;
 // END Elan2_Fields
 
 // START Elan2_SubNodes
-litValue: LIT_BOOLEAN | litInt | litFloat | litString | enumValue | litRegExp;
+litValue: LIT_BOOLEAN | litInt | litFloat | litString | enumValue; // litRegExp
 litInt: LITERAL_INTEGER | LITERAL_BINARY | LITERAL_HEX;
 litFloat: LITERAL_FLOAT;
 enumValue: typeName DOT identifier;
-litRegExp:;
+// litRegExp:;
 litString: LITERAL_STRING | INTERPOLATED_STRING;
 
 thisInstance: THIS;
@@ -257,7 +255,7 @@ bracketedExpression: OPEN_BRACKET expression CLOSE_BRACKET;
 unaryExpression: (MINUS | NOT) term;
 binaryExpression: term binaryOperator expression; // ? expression binaryOperator expression ?
 tuple: OPEN_BRACKET expression COMMA expression (COMMA expression)* CLOSE_BRACKET;
-methodCall: methodName OPEN_BRACKET argList CLOSE_BRACKET;
+methodCall: methodName OPEN_BRACKET argList? CLOSE_BRACKET;
 
 binaryOperator: 
   EQUAL | NOT_EQUAL | GT | LT | GE | LE |
@@ -267,7 +265,7 @@ ifExpression: IF_ OPEN_BRACKET expression COMMA expression COMMA expression CLOS
 // END Elan2_SubNodes
 
 // START RefLang_SubNodes
-newInstance:  NEW type OPEN_BRACKET argList CLOSE_BRACKET;
+newInstance:  NEW type OPEN_BRACKET argList? CLOSE_BRACKET;
 
 paramDef: identifier AS type;
 
@@ -287,9 +285,8 @@ expression:
     | unaryExpression
     | term
     | expression binaryOperator expression
-//  | power
+    | power
     ;
 
-//power: POW OPEN_BRACKET term COMMA term CLOSE_BRACKET;
-
+power: term POWER term;
 // END RefLang_SubNodes
