@@ -148,7 +148,7 @@ concreteClassTop: CLASS typeName (INHERITS typeName)?;
 concreteClassBottom: END CLASS;
 
 abstractClassTop: ABSTRACT CLASS typeName (INHERITS typeName)?;  
-abstractClassBottom: END ABSTRACT CLASS;
+abstractClassBottom: END CLASS;
 
 constant: GHOSTED? CONSTANT identifier SET TO constantValue NL;
 enum: GHOSTED? ENUM typeName enumValuesList NL;
