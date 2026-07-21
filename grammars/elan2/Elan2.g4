@@ -237,14 +237,6 @@ identifierWithOptIndexes: identifier index*;
 
 propertyRef: thisInstance DOT identifierWithOptIndexes;
 
-expression:
-      newInstance
-    | ifExpression
-    | unaryExpression
-    | term
-    | binaryExpression
-    ;
-
 term:  
     (thisInstance | chainable) (DOT chainable)*
     ; 
@@ -287,11 +279,17 @@ lambda: LAMBDA (paramsList | argList ) ARROW expression;
 
 list: OPEN_SQ_BRACKET expression (COMMA expression)* CLOSE_SQ_BRACKET;
 
-interpolatedString: INTERPOLATED_STRING_PREFIX DOUBLE_QUOTES segment* DOUBLE_QUOTES;
+interpolatedString: INTERPOLATED_STRING_PREFIX LITERAL_STRING;
 
-segment: textSegment | fieldSegment;
+expression:
+      newInstance
+    | ifExpression
+    | unaryExpression
+    | term
+    | expression binaryOperator expression
+//  | power
+    ;
 
-textSegment: TEXT;
+//power: POW OPEN_BRACKET term COMMA term CLOSE_BRACKET;
 
-fieldSegment: OPEN_BRACE expression CLOSE_BRACE;
 // END RefLang_SubNodes

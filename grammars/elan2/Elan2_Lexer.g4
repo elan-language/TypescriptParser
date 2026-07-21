@@ -35,7 +35,7 @@ MOD:           'mod';
 NEW:		   'new';
 NOT:           'not';
 OF:			   'of';
-OR:            'or';
+OR:            'or';         
 PRINT:		   'print';
 PRIVATE:       'private';
 PROCEDURE:	   'procedure';
