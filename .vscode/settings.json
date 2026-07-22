@@ -1,11 +1,11 @@
 {
     "antlr4.generation": {
-        "alternativeJar": "../../antlr-4.13.2-complete.jar",
+        "alternativeJar": "C:/GitHub/TypescriptParser/antlr-4.13.2-complete.jar",
         "mode": "external",
         "language": "JavaScript",
         "listeners": true,
         "visitors": true,
-        "outputDir": "../../src/generatedElan2",
-        "importDir": "./grammars/elan2"
+        "outputDir": "C:/GitHub/TypescriptParser/src/generatedPython",
+        "importDir": "C:/GitHub/TypescriptParser/grammars/python",
     },
 }

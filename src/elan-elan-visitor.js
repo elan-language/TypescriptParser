@@ -1,35 +1,53 @@
-import ElanVisitor from "./generatedElan2/Elan2Visitor.js";
+import Elan2Visitor from "./generatedElan2/Elan2Visitor.js";
 import { CharStream, CommonTokenStream } from "antlr4";
-import ElanLexer from "../src/generatedElan2/Elan2Lexer.js";
-import ElanParser from "../src/generatedElan2/Elan2Parser.js";
+import Elan2Lexer from "../src/generatedElan2/Elan2Lexer.js";
+import Elan2Parser from "../src/generatedElan2/Elan2Parser.js";
+import PythonLexer from "../src/generatedPython/PythonLexer.js";
+import PythonParser from "../src/generatedPython/PythonParser.js";
 
-function getParser(input) {
+function getElan2Parser(input) {
 	const chars = new CharStream(input); 
-	const lexer = new ElanLexer(chars);
+	const lexer = new Elan2Lexer(chars);
 	const tokens = new CommonTokenStream(lexer);
-	const parser = new ElanParser(tokens);
+	const parser = new Elan2Parser(tokens);
 	return parser
 }
 
+function getPythonParser(input) {
+	const chars = new CharStream(input); 
+	const lexer = new PythonLexer(chars);
+	const tokens = new CommonTokenStream(lexer);
+	const parser = new PythonParser(tokens);
+	return parser
+}
+
+
 export function parseExpression(input) {
-	const parser = getParser(input);
+	const parser = getElan2Parser(input);
 	const tree = parser.expression();
 	return tree;
 }
 
 export function parseLitValue(input) {
-	const parser = getParser(input);
+	const parser = getElan2Parser(input);
 	const tree = parser.litValue();
 	return tree;
 }
 
-export function parseType(input) {
-	const parser = getParser(input);
+export function parseElan2Type(input) {
+	const parser = getElan2Parser(input);
 	const tree = parser.type();
 	return tree;
 }
 
-export class ElanElanVisitor extends ElanVisitor {
+export function parsePythonType(input) {
+	const parser = getPythonParser(input);
+	const tree = parser.type();
+	return tree;
+}
+
+
+export class ElanElanVisitor extends Elan2Visitor {
 
     visitExpression(ctx) {
 	  return this.visitChildren(ctx);
