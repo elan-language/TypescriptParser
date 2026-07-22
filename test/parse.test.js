@@ -1,20 +1,20 @@
 import { CharStream, CommonTokenStream } from "antlr4";
 import assert from "assert";
-import ElanLexer from "../src/generatedElan/ElanLexer.js";
-import ElanParser from "../src/generatedElan/ElanParser.js";
-import { ElanElanVisitor, parseExpression, parseLiteralValue, parseType } from "../src/elan-elan-visitor.js";
+import ElanLexer from "../src/generatedElan2/Elan2Lexer.js";
+import ElanParser from "../src/generatedElan2/Elan2Parser.js";
+import { ElanElanVisitor, parseExpression, parseLitValue, parseType } from "../src/elan-elan-visitor.js";
 
 
 describe("parse", () => {
   it("parses literal bool", async () => {
     const input = "true"
-    const tree = parseLiteralValue(input);
+    const tree = parseLitValue(input);
     assert.strictEqual(tree.parser.syntaxErrorsCount, 0);
   });
 
    it("parses literal int", async () => {
     const input = "1"
-    const tree = parseLiteralValue(input);
+    const tree = parseLitValue(input);
     assert.strictEqual(tree.parser.syntaxErrorsCount, 0);
   });
 

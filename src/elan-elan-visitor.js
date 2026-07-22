@@ -1,7 +1,7 @@
-import ElanVisitor from "./generatedElan/ElanVisitor.js";
+import ElanVisitor from "./generatedElan2/Elan2Visitor.js";
 import { CharStream, CommonTokenStream } from "antlr4";
-import ElanLexer from "../src/generatedElan/ElanLexer.js";
-import ElanParser from "../src/generatedElan/ElanParser.js";
+import ElanLexer from "../src/generatedElan2/Elan2Lexer.js";
+import ElanParser from "../src/generatedElan2/Elan2Parser.js";
 
 function getParser(input) {
 	const chars = new CharStream(input); 
@@ -17,9 +17,9 @@ export function parseExpression(input) {
 	return tree;
 }
 
-export function parseLiteralValue(input) {
+export function parseLitValue(input) {
 	const parser = getParser(input);
-	const tree = parser.literalValue();
+	const tree = parser.litValue();
 	return tree;
 }
 
