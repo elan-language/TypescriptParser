@@ -279,7 +279,7 @@ logicalOp: AND | OR | XOR;
 conditionalOp: GT | LT | GE | LE | IS | IS_NOT;
 
 // TYPES
-type:  VALUE_TYPE | TYPENAME | TYPENAME genericSpecifier | tupleType |  funcType;
+type:  typeTuple | typeName | typeGeneric;
 
 dataStructureType: (ARRAY | LIST | DICTIONARY | ITERABLE ) genericSpecifier;
 

@@ -1,292 +1,297 @@
 grammar Elan;
 import Elan_Lexer;
 
-file: (main | procedureDef | functionDef | constantDef | enumDef | classDef | test | importStatement )* NL* EOF;
+// START Elan2_Frames
+file: COMMENT? global* NL* EOF;
 
-importStatement: IMPORT namespace;
+// Globals
+global:
+	  main
+	| function
+ 	| test
+    | procedure
+	| constant
+	| enum
+	| concreteClass
+	| abstractClass
+	| commentGlobal
+    ; 
 
-namespace: (TYPENAME | IDENTIFIER) (DOT (TYPENAME | IDENTIFIER))*;
+main: 
+    NL GHOSTED? mainTop
+       ordinaryStatement*
+    NL mainBottom
+    ;
 
-main:  
-	NL MAIN  
-    statementBlock
-    NL END MAIN 
+function: 
+    NL GHOSTED? functionTop
+        (letStatement | ordinaryStatement)* /* statements with side-effects prevented by editor and/or compiler */
+        returnStatement
+    NL functionBottom
     ;
 
 test: 
-	NL TEST IDENTIFIER
-    testStatements
-    NL END TEST 
+    NL GHOSTED? testTop
+        (assert | letStatement | variableDefinition | commentStatement)*
+    NL testBottom
     ;
 
-// STATEMENTS
-statementBlock:  (varDef | assignment | proceduralControlFlow | callStatement | throwException | printStatement)*;
+procedure: 
+    NL GHOSTED? procedureTop
+        ordinaryStatement*
+    NL procedureBottom
+    ;
 
-testStatements: (assert | varDef | callStatement)*;
-
-assert: NL ASSERT expression IS value;
-
-callStatement: NL CALL (procedureCall | (assignableValue DOT procedureCall));
-
-throwException: NL THROW (LITERAL_STRING | IDENTIFIER );
-
-printStatement: NL PRINT expression?;
-
-varDef: NL VAR assignableValue SET TO expression;
-
-assignment: NL SET assignableValue TO expression;
-
-inlineAsignment: assignableValue SET TO expression;
-
-assignableValue: (scopeQualifier?  IDENTIFIER index?) | deconstructedTuple | listDecomp;
-
-procedureCall: scopeQualifier? IDENTIFIER OPEN_BRACKET (argumentList)? CLOSE_BRACKET;
-
-functionCall: scopeQualifier? IDENTIFIER OPEN_BRACKET (argumentList)? CLOSE_BRACKET;
-
-systemCall: SYSTEM DOT IDENTIFIER OPEN_BRACKET (argumentList)? CLOSE_BRACKET;
-
-input: INPUT LITERAL_STRING?;
-
-argument: (expression | lambda);
-
-argumentList: argument (COMMA argument)*;
-
-// PROCEDURES
-procedureDef:
-	NL PROCEDURE procedureSignature
-	statementBlock 
-    NL END PROCEDURE
-	;
-
-procedureSignature: IDENTIFIER OPEN_BRACKET procedureParameterList? CLOSE_BRACKET;
-
-procedureParameterList: procedureParameter (COMMA procedureParameter)*;
-
-parameterList: parameter (COMMA parameter)*;
-
-parameter: IDENTIFIER type;
-
-procedureParameter: OUT? IDENTIFIER type;
-
-// FUNCTIONS
-functionDef: 
-	NL FUNCTION functionSignature
-	statementBlock
-	NL RETURN (expression | DEFAULT)
-    NL END FUNCTION
-	;
-   
-functionSignature: IDENTIFIER OPEN_BRACKET parameterList? CLOSE_BRACKET AS type;
-
-// CONSTANTS
-constantDef: NL CONSTANT IDENTIFIER SET TO (literal | newInstance);
-
-// ENUMERATIONS
-enumDef: 
-	NL ENUM enumType
-	  NL IDENTIFIER (COMMA IDENTIFIER)*  
-	NL END ENUM
-	;
-
-enumType: TYPENAME;
-enumValue:	enumType DOT IDENTIFIER;
-
-// CLASSES
-classDef: mutableClass | abstractClass| immutableClass | abstractImmutableClass;
-
-mutableClass: 
-	NL CLASS TYPENAME inherits?
-	econstructor
-    (NL property | functionDef | procedureDef )*	
-    NL END CLASS
-	;
+concreteClass:
+    NL GHOSTED? concreteClassTop
+        (econstructor | property | functionMethod | procedureMethod | copyMethod | commentMember)*
+    NL concreteClassBottom;
 
 abstractClass:
-	NL ABSTRACT CLASS TYPENAME inherits?
-    (NL ABSTRACT property | NL ABSTRACT FUNCTION functionSignature | NL ABSTRACT PROCEDURE procedureSignature)*
-    NL END CLASS
-	;
+    NL GHOSTED? abstractClassTop
+        (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure | commentMember)*
+    NL abstractClassBottom;
 
-immutableClass: 
-	NL IMMUTABLE CLASS TYPENAME inherits?
-	econstructor
-    (NL property | functionDef)*
-    NL END CLASS 
-	;
+commentGlobal:
+    NL COMMENT
+    ;  
 
-abstractImmutableClass:
-	NL ABSTRACT IMMUTABLE CLASS TYPENAME inherits?
-    (NL ABSTRACT property | NL ABSTRACT FUNCTION functionSignature)*
-    NL END CLASS
-	;
- 
-inherits: INHERITS type (COMMA type)*;
+// Statements
+ordinaryStatement:
+    print 
+   | variableDefinition 
+   | assignment 
+   | inputStatement 
+   | ifStatement 
+   | whileLoop 
+   | forLoop 
+   | procedureCall 
+   | tryStatement 
+   | throwStatement 
+   | commentStatement
+   ;
+   
+ifStatement:
+    NL GHOSTED? ifStatementTop
+        (elseIfClause | elseClause | ordinaryStatement)*
+    NL ifStatementBottom
+    ;
 
-property: PRIVATE? PROPERTY IDENTIFIER type; 
+whileLoop:
+    NL GHOSTED? whileLoopTop
+       ordinaryStatement*
+    NL whileLoopBottom
+    ;
 
-econstructor: 
-	NL CONSTRUCTOR OPEN_BRACKET parameterList? CLOSE_BRACKET
-    statementBlock
-	NL END CONSTRUCTOR
-	;
+forLoop:
+    NL GHOSTED? forLoopTop
+       ordinaryStatement*
+    NL forLoopBottom
+    ;
 
-// INSTANTIATION
-newInstance:
-	NEW type OPEN_BRACKET argumentList? CLOSE_BRACKET withClause?
-	| IDENTIFIER withClause
-	;
+tryStatement:
+    NL GHOSTED? tryStatementTop
+        ordinaryStatement*
+        catchStatement
+        ordinaryStatement*
+    NL tryStatementBottom
+    ;
 
-withClause: WITH OPEN_BRACE inlineAsignment (COMMA inlineAsignment)* CLOSE_BRACE;
+commentStatement: NL COMMENT; 
 
-// CONTROL FLOW STATEMENTS
-proceduralControlFlow: if | for | each | while | repeat | try | switch;
+// Members
+econstructor:
 
-if:
-	NL IF expression
-    statementBlock
-    (NL ELSE IF expression
-    statementBlock)*
-    (NL ELSE
-    statementBlock)?
-    NL END IF
-	;
+    NL GHOSTED? constructorTop
+        ordinaryStatement*
+    NL constructorBottom
+    ;
 
-for: 
-	NL FOR IDENTIFIER FROM expression TO expression (STEP MINUS? LITERAL_INTEGER)?
-	statementBlock
-	NL END FOR
-	;
+functionMethod:
+    NL GHOSTED? PRIVATE? functionMethodTop
+        (letStatement | ordinaryStatement)*
+        returnStatement
+    NL functionMethodBottom
+    ;
 
-each: 
-	NL EACH IDENTIFIER IN expression 
-    statementBlock
-    NL END EACH
-	;
-          
-while: 
-	NL WHILE expression 
-    statementBlock
-    NL END WHILE
-	;
-          
-repeat: 
-	NL (REPEAT)
-    statementBlock
-    NL END REPEAT WHEN expression
-	;
+procedureMethod:
+    NL GHOSTED? PRIVATE?  procedureMethodTop
+        ordinaryStatement*
+    NL procedureMethodBottom
+    ;
 
-try: 
-	NL TRY 
-    statementBlock
-    NL CATCH IDENTIFIER 
-	statementBlock
-    NL END TRY
-	;
+copyMethod:
+    NL GHOSTED? PRIVATE? copyMethodTop
+        ordinaryStatement*
+        returnStatement
+    NL copyMethodBottom
+    ;
 
-switch: 
-	NL SWITCH expression
-	  case+
-      caseDefault
-	NL END SWITCH
-	;
-	
-case: 
-	NL CASE MINUS? literalValue
-    statementBlock
-	;
+commentMember: NL COMMENT?;
+// END Elan2_Frames
 
-caseDefault : 
-	NL DEFAULT
-    statementBlock
-	;
+// START RefLang_Frames
+// Globals
+mainTop: MAIN;
+mainBottom: END MAIN;
 
-// EXPRESSIONS
-expression: 
-	  bracketedExpression
-	| functionCall 
-	| value
-	| expression index
-	| expression DOT functionCall
-	| expression DOT IDENTIFIER 
-	| unaryOp expression
-	| expression POWER expression // so that ^ has higher priority (because implemented with function in CSharp)
-	| expression binaryOp expression
-	| newInstance
-	| expression ifExpression elseExpression 
-	| expression withClause
-	| input
-	| systemCall
-	;
+functionTop: FUNCTION methodName OPEN_BRACKET paramsList? CLOSE_BRACKET RETURNS type;
+functionBottom: END FUNCTION;
 
-bracketedExpression: OPEN_BRACKET expression CLOSE_BRACKET ; //made into rule so that compiler can add the brackets explicitly
+testTop: TEST testName;
+testBottom: END TEST;
 
-ifExpression: IF expression;
+procedureTop: PROCEDURE methodName OPEN_BRACKET paramsList? CLOSE_BRACKET; 
+procedureBottom: END PROCEDURE;
 
-elseExpression : ELSE expression;
+concreteClassTop: CLASS typeName (INHERITS typeName)?; 
+concreteClassBottom: END CLASS;
 
-lambda: LAMBDA argumentList ARROW expression;
+abstractClassTop: ABSTRACT CLASS typeName (INHERITS typeName)?;  
+abstractClassBottom: END ABSTRACT CLASS;
 
-index: OPEN_SQ_BRACKET (expression | expression COMMA expression | range) CLOSE_SQ_BRACKET;
+constant: NL GHOSTED? CONSTANT identifier SET TO constantValue;
+enum: NL GHOSTED? ENUM typeName enumValuesList;
 
-range: expression DOUBLE_DOT expression | expression DOUBLE_DOT	| DOUBLE_DOT expression; 
+// Statements
+assert: NL GHOSTED? ASSERT assertActual EQUAL expression; 
+letStatement: NL GHOSTED? LET identifier BE expression;
+print: NL GHOSTED? PRINT OPEN_BRACKET argList CLOSE_BRACKET; // TODO argList should really be a single expression. Compiler currently ignores any additional arguments
+variableDefinition: NL GHOSTED? VARIABLE identifier SET TO expression; 
+assignment: NL GHOSTED? ASSIGN assignable TO expression; 
+inputStatement: NL GHOSTED? INPUT identifier SET TO methodName OPEN_BRACKET argList CLOSE_BRACKET; 
+procedureCall: NL GHOSTED? CALL procRef OPEN_BRACKET argList CLOSE_BRACKET;
+throwStatement: NL GHOSTED? THROW typeName litString; // TODO: currently has typeNameUse 
+returnStatement: NL RETURN expression; // not ghostable
+elseIfClause:NL GHOSTED? ELIF expression THEN;
+elseClause: NL GHOSTED? ELSE; // TODO
+catchStatement: NL GHOSTED? CATCH identifier AS typeName;
 
-// VALUES
-value: literal | scopeQualifier? IDENTIFIER  |dataStructureDefinition | THIS | DEFAULT type;
+ifStatementTop: IF expression THEN;
+ifStatementBottom: END IF;
 
-scopeQualifier: (PROPERTY | GLOBAL | LIBRARY | (PACKAGE DOT namespace)) DOT; 
- 
-// LITERALS
-literal: literalValue | literalDataStructure ; 
+whileLoopTop: WHILE expression;
+whileLoopBottom: END WHILE;
 
-literalValue:  BOOL_VALUE | LITERAL_INTEGER | LITERAL_FLOAT | LITERAL_CHAR | enumValue ;
+forLoopTop: FOR identifier IN expression;
+forLoopBottom: END FOR;
 
-dataStructureDefinition:  listDefinition | arrayDefinition | tupleDefinition | dictionaryDefinition  ;
- 
-literalDataStructure: LITERAL_STRING | literalTuple | literalList | literalDictionary;
+tryStatementTop: TRY; 
+tryStatementBottom: END TRY;
 
-tupleDefinition:  OPEN_BRACKET expression COMMA expression (COMMA expression)* CLOSE_BRACKET; 
+// Members
+constructorTop: CONSTRUCTOR OPEN_BRACKET paramsList? CLOSE_BRACKET;
+constructorBottom: END CONSTRUCTOR;
 
-literalTuple:  OPEN_BRACKET literal COMMA literal (COMMA literal)* CLOSE_BRACKET; 
+property: NL PRIVATE? PROPERTY identifier AS type;
 
-deconstructedTuple: OPEN_BRACKET IDENTIFIER (COMMA IDENTIFIER)+  CLOSE_BRACKET;
- 
-listDefinition: OPEN_BRACE (expression (COMMA expression)*) CLOSE_BRACE;
+functionMethodTop: functionTop;
+functionMethodBottom: functionBottom;
 
-literalList: OPEN_BRACE (literal (COMMA literal)* ) CLOSE_BRACE;
+procedureMethodTop: procedureTop;
+procedureMethodBottom: procedureBottom;
 
-listDecomp: OPEN_BRACE IDENTIFIER COLON IDENTIFIER CLOSE_BRACE;
+copyMethodTop: COPY methodName OPEN_BRACKET paramsList CLOSE_BRACKET RETURNS type;
+copyMethodBottom: END COPY;
 
-arrayDefinition: ARRAY genericSpecifier OPEN_BRACKET LITERAL_INTEGER? CLOSE_BRACKET;
+abstractFunction: NL GHOSTED? ABSTRACT functionTop;
+abstractProcedure: NL GHOSTED? ABSTRACT procedureTop;
+// END RefLang_Frames
 
-dictionaryDefinition: OPEN_BRACE (kvp (COMMA kvp)* ) CLOSE_BRACE;
+// START Elan2_Fields
+identifier: NAME_STARTING_LC;
+assignable: identifierWithOptIndexes | propertyRef;
 
-literalDictionary: OPEN_BRACE (literalKvp (COMMA literalKvp)*) CLOSE_BRACE;
+methodName: NAME_STARTING_LC;
+testName: NAME_STARTING_TEST_;
+typeName:  INT_NAME | FLOAT_NAME | BOOL_NAME | STRING_NAME | LIST_NAME | NAME_STARTING_UC;
 
-kvp: expression COLON expression;
+constantValue: litValue | identifier;
 
-literalKvp: literal COLON literal;
+argList: argument (COMMA argument)*;
+argument: lambda | expression;
+paramsList: paramDef (COMMA paramDef)*;
 
-// OPERATIONS
-unaryOp: MINUS | NOT;
+type: typeTuple | typeName | typeGeneric ; 
 
-binaryOp: arithmeticOp | logicalOp | conditionalOp ;
+enumValuesList:  identifier (COMMA identifier)*;
 
-arithmeticOp:  POWER | MULT | DIVIDE | MOD | DIV | PLUS | MINUS;
+procRef: (thisInstance DOT)? (identifierWithOptIndexes DOT)? methodName; 
 
-logicalOp: AND | OR | XOR;
+assertActual: expression;
+// END Elan2_Fields
 
-conditionalOp: GT | LT | GE | LE | IS | IS_NOT;
+// START Elan2_SubNodes
+litValue: LIT_BOOLEAN | litInt | litFloat | litString | enumValue | litRegExp;
+litInt: LITERAL_INTEGER | LITERAL_BINARY | LITERAL_HEX;
+litFloat: LITERAL_FLOAT;
+enumValue: typeName DOT identifier;
+litRegExp:;
+litString: LITERAL_STRING | INTERPOLATED_STRING;
 
-// TYPES
-type: VALUE_TYPE | TYPENAME | TYPENAME genericSpecifier | tupleType | funcType;
+thisInstance: THIS;
 
-dataStructureType: (ARRAY | LIST | DICTIONARY | ITERABLE ) genericSpecifier;
+index: OPEN_SQ_BRACKET expression CLOSE_SQ_BRACKET;
 
-genericSpecifier: LT OF type (COMMA type)* GT;
+identifierWithOptIndexes: identifier index*;
 
-tupleType: OPEN_BRACKET type (COMMA type)+ CLOSE_BRACKET; 
+propertyRef: thisInstance DOT identifierWithOptIndexes;
 
-typeList: type (COMMA type)*;
-    
-funcType: 'Func' LT OF typeList ARROW type GT;
+expression:
+      newInstance
+    | ifExpression
+    | unaryExpression
+    | term
+    | binaryExpression
+    ;
+
+term:  
+    (thisInstance | chainable) (DOT chainable)*
+    ; 
+
+chainable:
+    (
+      identifier
+    | methodCall
+    | bracketedExpression
+    | tuple
+    | litValue
+    | list
+    )
+    index*
+    ;
+
+bracketedExpression: OPEN_BRACKET expression CLOSE_BRACKET;
+unaryExpression: (MINUS | NOT) term;
+binaryExpression: term binaryOperator expression; // ? expression binaryOperator expression ?
+tuple: OPEN_BRACKET expression COMMA expression (COMMA expression)* CLOSE_BRACKET;
+methodCall: methodName OPEN_BRACKET argList CLOSE_BRACKET;
+
+binaryOperator: 
+  EQUAL | NOT_EQUAL | GT | LT | GE | LE |
+  MULT | DIVIDE | PLUS | MINUS | AND | OR | MOD;
+     
+ifExpression: IF_ OPEN_BRACKET expression COMMA expression COMMA expression CLOSE_BRACKET;
+// END Elan2_SubNodes
+
+// START RefLang_SubNodes
+newInstance:  NEW type OPEN_BRACKET argList CLOSE_BRACKET;
+
+paramDef: identifier AS type;
+
+typeGeneric: typeName LT OF type (COMMA type)* GT;
+
+typeTuple: OPEN_BRACKET type (COMMA type)+ CLOSE_BRACKET;
+
+lambda: LAMBDA (paramsList | argList ) ARROW expression;
+
+list: OPEN_SQ_BRACKET expression (COMMA expression)* CLOSE_SQ_BRACKET;
+
+interpolatedString: INTERPOLATED_STRING_PREFIX DOUBLE_QUOTES segment* DOUBLE_QUOTES;
+
+segment: textSegment | fieldSegment;
+
+textSegment: TEXT;
+
+fieldSegment: OPEN_BRACE expression CLOSE_BRACE;
+// END RefLang_SubNodes

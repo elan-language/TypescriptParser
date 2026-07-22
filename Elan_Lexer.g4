@@ -1,115 +1,119 @@
 lexer grammar Elan_Lexer;
 
-NL: [\r\n\f]+ ;
-SINGLE_LINE_COMMENT: NL? Whitespace* COMMENT_MARKER InputCharacter*    -> skip; 
+// TODO: need to have reserved words from ALL langs defined in Lexer to test that we aren't unknowingly using them somewhere else
+// e.g. use of 'set' for a method name
 
-COMMENT_MARKER: '#';
-
-// Keywords
+// START RefLang_Lexer
 ABSTRACT:      'abstract';
 AND:           'and';
 AS:			   'as';
 ASSERT:		   'assert';
+ASSIGN:        'assign';
+BE:			   'be';
 CALL:		   'call';
-CASE: 		   'case';
 CATCH:         'catch';
 CLASS:         'class';
 CONSTANT:      'constant';
 CONSTRUCTOR:   'constructor';
-CURRY:   	   'curry';
-DEFAULT: 	   'default'; 
+COPY:		   'copy';
 DIV: 		   'div';
-EACH:		   'each';
+ELIF:          'elif';
 ELSE:          'else';
 END:		   'end'; 
 ENUM:          'enum';
 FOR:           'for';
 FROM:		   'from';
 FUNCTION:	   'function';
-GLOBAL:		   'global';
 IF:            'if'; 
-IMMUTABLE:	   'immutable';
-IMPORT: 	   'import';
 IN:            'in';
 INHERITS:      'inherits';
 INPUT:         'input';
 LAMBDA:		   'lambda';
 LET:           'let';
-LIBRARY: 	   'library';
 MAIN:		   'main';
 MOD:           'mod';
 NEW:		   'new';
 NOT:           'not';
 OF:			   'of';
-IS:            'is';
 OR:            'or';
-OUT:		   'out';
-PACKAGE:       'package';
-PARTIAL: 	   'partial';
 PRINT:		   'print';
 PRIVATE:       'private';
 PROCEDURE:	   'procedure';
 PROPERTY:      'property';
-REPEAT:		   'repeat';
 RETURN:        'return';
+RETURNS:       'returns';
 SET:	 	   'set';
 STEP:		   'step';
-SWITCH:        'switch';
-SYSTEM:		   'system';
 TEST:		   'test';
+THEN: 		   'then';
 THIS: 		   'this';
 THROW:		   'throw';
 TO:			   'to';
 TRY:           'try';
-VAR:		   'var';
-WHEN:		   'when';
+VARIABLE:	   'variable';
 WHILE:         'while';
-WITH: 		   'with';
-XOR:                   'xor';
 
-BOOL_VALUE: 'true' | 'false';
+INT_NAME:       'Int';
+FLOAT_NAME:     'Float';
+BOOL_NAME:      'Boolean';
+STRING_NAME:    'String';
+LIST_NAME:      'List';
 
-// Types
-VALUE_TYPE:   'Int' | 'Float' | 'Char' | 'String' | 'Bool' ;
-ARRAY: 'Array';
-LIST:  'List';
-DICTIONARY: 'Dictionary';
-ITERABLE: 'Iter';
+COMMENT: '#' ~( '\r' | '\n' )*;
+LIT_BOOLEAN:    'true' | 'false'; // In other langs, the casing may be different
 
-//Operators And Punctuators
-EQUALS:					  '=';
-ARROW:					  '->'; 
-OPEN_BRACE:               '{';
-CLOSE_BRACE:              '}';
-OPEN_SQ_BRACKET:          '[';
-CLOSE_SQ_BRACKET:         ']';
-OPEN_BRACKET:              '(';
-CLOSE_BRACKET:             ')';
-DOUBLE_DOT:               '..';
-DOT:                      '.';
-COMMA:                    ','; 
-COLON:                    ':';
-PLUS:                     '+';
-MINUS:                    '-';
-MULT:                     '*';
-DIVIDE:                   '/';
-POWER:                    '^';
-LT:                       '<';
-GT:                       '>';
-LE:                       '<=';
-GE:                       '>=';
-IS_NOT:                   IS (Whitespace)* NOT;
+EQUAL:          'is';
+NOT_EQUAL:      'isnt';
+ARROW:          '=>';
 
-TYPENAME:           IdentifierStartingUC;
-IDENTIFIER:         IdentifierStartingLC;
+BINARY_PREFIX:  '0b';
+HEX_PREFIX:     '0x';
+INTERPOLATED_STRING_PREFIX: '$';
+// END RefLang_Lexer
 
-LITERAL_INTEGER:     [0-9] [0-9]*;
-LITERAL_FLOAT:        LITERAL_INTEGER DOT LITERAL_INTEGER ExponentPart?;
+// START ELAN2_Lexer:
+WS  :   [ \t]+ -> skip ;
+NL: [\r\n\f]+ ;
 
-LITERAL_CHAR:                   '\'' (~['\\\r\n\u0085] | CommonCharacter) '\'' | '\'\'';
-LITERAL_STRING:                      '"'  (~["\u0085] | CommonCharacter)* '"';
+SINGLE_EQUALS:			 	'=';
+OPEN_BRACE:               	'{';
+CLOSE_BRACE:              	'}';
+OPEN_SQ_BRACKET:          	'[';
+CLOSE_SQ_BRACKET:         	']';
+OPEN_BRACKET:              	'(';
+CLOSE_BRACKET:             	')';
+DOT:                      	'.';
+COMMA:                    	','; 
+COLON:                    	':';
+PLUS:                     	'+';
+MINUS:                    	'-';
+MULT:                     	'*';
+DIVIDE:                   	'/';
+LT:                       	'<';
+GT:                       	'>';
+LE:                       	'<=';
+GE:                       	'>=';
+DOUBLE_QUOTES:			  	'"';
+
+IF_: 'if_'; // Temporary solution - to be replaced by language-specific implementation
+
+NAME_STARTING_TEST_:         'test_' IdentifierPartCharacter*;
+NAME_STARTING_LC:			UnicodeClassLL IdentifierPartCharacter*;
+NAME_STARTING_UC:         UnicodeClassLU IdentifierPartCharacter*;
+
+LITERAL_BINARY: 		BINARY_PREFIX [01]+;
+LITERAL_HEX: 			HEX_PREFIX [0-9A-Fa-f]+;
+LITERAL_INTEGER:     	[0-9] [0-9]*;
+
+LITERAL_FLOAT:        	LITERAL_INTEGER DOT LITERAL_INTEGER ExponentPart?;
+INTERPOLATED_STRING:     INTERPOLATED_STRING_PREFIX '"'  (~["\u0085] | CommonCharacter)* '"'; 
+// INTERPOLATED_STRING - a temp kludge pending full node-parsing of interpolated string - must precede:
+LITERAL_STRING:         '"'  (~["\u0085] | CommonCharacter)* '"';
 
 WHITESPACES:   (Whitespace)+  -> skip;
+TEXT: CommonCharacter+;
+
+GHOSTED: '[ghosted]';
 
 fragment InputCharacter: ~[\r\n\u0085];
 
@@ -119,7 +123,7 @@ fragment NewLineCharacter
 	| '\u0085' // Next Line 
 	;
 
-fragment ExponentPart:   [eE] (PLUS | MINUS)? LITERAL_INTEGER;
+fragment ExponentPart:   [e] (PLUS | MINUS)? LITERAL_INTEGER;
 
 fragment CommonCharacter
 	: SimpleEscapeSequence
@@ -164,10 +168,6 @@ fragment UnicodeClassZS
 
 fragment IdentifierStartingUCorLC: (UnicodeClassLL|UnicodeClassLU) IdentifierPartCharacter*;
 
-fragment IdentifierStartingLC: UnicodeClassLL IdentifierPartCharacter*;
-
-fragment IdentifierStartingUC: UnicodeClassLU IdentifierPartCharacter*;
-
 fragment IdentifierPartCharacter
 	: UnicodeClassLU
 	| UnicodeClassLL
@@ -200,10 +200,4 @@ fragment HexDigit : [0-9] | [A-F] | [a-f];
 fragment UnicodeClassLU: '\u0041'..'\u005a';
 fragment UnicodeClassLL	: '\u0061'..'\u007A';
 fragment UnicodeClassND	: '\u0030'..'\u0039';
-	
-NEWLINE
-  : '\r'? '\n'
-  | '\r'
-  ;
-
-WS  :   [ \t]+ -> skip ;
+// END Elan2_Lexer
