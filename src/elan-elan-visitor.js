@@ -1,4 +1,5 @@
 import Elan2Visitor from "./generatedElan2/Elan2Visitor.js";
+import PythonVisitor from "./generatedPython/PythonVisitor.js";
 import { CharStream, CommonTokenStream } from "antlr4";
 import Elan2Lexer from "../src/generatedElan2/Elan2Lexer.js";
 import Elan2Parser from "../src/generatedElan2/Elan2Parser.js";
@@ -48,9 +49,5 @@ export function parsePythonType(input) {
 
 
 export class ElanElanVisitor extends Elan2Visitor {
-
-    visitExpression(ctx) {
-	  return this.visitChildren(ctx);
-	}
-
+	
 }
