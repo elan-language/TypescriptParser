@@ -18,39 +18,42 @@ global:
     ; 
 
 main: 
-    GHOSTED? mainTop NL
+    GHOSTED? MAIN NL
        ordinaryStatement*
-    mainBottom NL
+    END MAIN NL
     ;
 
 function: 
-    GHOSTED? functionTop NL
+    GHOSTED? FUNCTION methodName OPEN_BRACKET paramsList? CLOSE_BRACKET RETURNS type NL
         (letStatement | ordinaryStatement)* /* statements with side-effects prevented by editor and/or compiler */
         returnStatement
-    functionBottom NL
+    END FUNCTION NL
     ;
 
 test: 
-    GHOSTED? testTop NL
+    GHOSTED? TEST testName NL
         (assert | letStatement | variableDefinition | commentStatement)*
-    testBottom NL
+    END TEST NL
     ;
 
 procedure: 
-    GHOSTED? procedureTop NL
+    GHOSTED? PROCEDURE methodName OPEN_BRACKET paramsList? CLOSE_BRACKET NL
         ordinaryStatement*
-    procedureBottom NL
+    END PROCEDURE NL
     ;
 
+constant: GHOSTED? CONSTANT identifier SET TO constantValue NL;
+enum: GHOSTED? ENUM typeName enumValuesList NL;
+
 concreteClass:
-    GHOSTED? concreteClassTop NL
+    GHOSTED? CLASS typeName (INHERITS typeName)? NL
         (constructorMember | property | functionMethod | procedureMethod | copyMethod | commentMember)*
-    concreteClassBottom NL;
+    END CLASS NL;
 
 abstractClass:
-    GHOSTED? abstractClassTop NL
+    GHOSTED? ABSTRACT CLASS typeName (INHERITS typeName)? NL
         (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure | commentMember)*
-    abstractClassBottom NL;
+    END CLASS NL;
 
 commentGlobal:
     COMMENT NL
@@ -72,88 +75,31 @@ ordinaryStatement:
    ;
    
 ifStatement:
-    GHOSTED? ifStatementTop NL
+    GHOSTED? IF expression THEN NL
         (elseIfClause | elseClause | ordinaryStatement)*
-    ifStatementBottom NL
+    END IF NL
     ;
 
 whileLoop:
-    GHOSTED? whileLoopTop NL
+    GHOSTED? WHILE expression NL
        ordinaryStatement*
-    whileLoopBottom NL
+    END WHILE NL
     ;
 
 forLoop:
-    GHOSTED? forLoopTop NL
+    GHOSTED? FOR identifier IN expression NL
        ordinaryStatement*
-    forLoopBottom NL
+    END FOR NL
     ;
 
 tryStatement:
-    GHOSTED? tryStatementTop NL
+    GHOSTED? TRY NL
         ordinaryStatement*
         catchStatement
         ordinaryStatement*
-    tryStatementBottom NL
+    END TRY NL
     ;
 
-commentStatement: COMMENT NL; 
-
-// Members
-constructorMember:
-
-    GHOSTED? constructorTop NL
-        ordinaryStatement*
-    constructorBottom NL
-    ;
-
-functionMethod:
-    GHOSTED? PRIVATE? functionMethodTop NL
-        (letStatement | ordinaryStatement)*
-        returnStatement
-    functionMethodBottom NL
-    ;
-
-procedureMethod:
-    GHOSTED? PRIVATE?  procedureMethodTop NL
-        ordinaryStatement*
-    procedureMethodBottom NL
-    ;
-
-copyMethod:
-    GHOSTED? PRIVATE? copyMethodTop NL
-        ordinaryStatement*
-        returnStatement
-    copyMethodBottom NL
-    ;
-
-commentMember: COMMENT? NL;
-// END Elan2_Frames
-
-// START RefLang_Frames
-// Globals
-mainTop: MAIN;
-mainBottom: END MAIN;
-
-functionTop: FUNCTION methodName OPEN_BRACKET paramsList? CLOSE_BRACKET RETURNS type;
-functionBottom: END FUNCTION;
-
-testTop: TEST testName;
-testBottom: END TEST;
-
-procedureTop: PROCEDURE methodName OPEN_BRACKET paramsList? CLOSE_BRACKET; 
-procedureBottom: END PROCEDURE;
-
-concreteClassTop: CLASS typeName (INHERITS typeName)?; 
-concreteClassBottom: END CLASS;
-
-abstractClassTop: ABSTRACT CLASS typeName (INHERITS typeName)?;  
-abstractClassBottom: END CLASS;
-
-constant: GHOSTED? CONSTANT identifier SET TO constantValue NL;
-enum: GHOSTED? ENUM typeName enumValuesList NL;
-
-// Statements
 assert: GHOSTED? ASSERT assertActual EVALUATES TO expression NL; 
 letStatement: GHOSTED? LET identifier BE expression NL;
 print: GHOSTED? PRINT OPEN_BRACKET expression? CLOSE_BRACKET NL;
@@ -166,39 +112,38 @@ returnStatement: RETURN expression NL; // not ghostable
 elseIfClause: GHOSTED? ELIF expression THEN NL;
 elseClause: GHOSTED? ELSE NL; // TODO
 catchStatement: GHOSTED? CATCH identifier AS typeName NL;
-
-ifStatementTop: IF expression THEN;
-ifStatementBottom: END IF;
-
-whileLoopTop: WHILE expression;
-whileLoopBottom: END WHILE;
-
-forLoopTop: FOR identifier IN expression;
-forLoopBottom: END FOR;
-
-tryStatementTop: TRY; 
-tryStatementBottom: END TRY;
+commentStatement: COMMENT NL; 
 
 // Members
-constructorTop: CONSTRUCTOR OPEN_BRACKET paramsList? CLOSE_BRACKET;
-constructorBottom: END CONSTRUCTOR;
+constructorMember:
+    GHOSTED? CONSTRUCTOR OPEN_BRACKET paramsList? CLOSE_BRACKET NL
+        ordinaryStatement*
+    END CONSTRUCTOR NL
+    ;
 
 property: PRIVATE? PROPERTY identifier AS type NL;
 
-functionMethodTop: functionTop;
-functionMethodBottom: functionBottom;
+functionMethod:
+    GHOSTED? PRIVATE? FUNCTION methodName OPEN_BRACKET paramsList? CLOSE_BRACKET RETURNS type NL
+        (letStatement | ordinaryStatement)*
+        returnStatement
+    END FUNCTION NL
+    ;
 
-procedureMethodTop: procedureTop;
-procedureMethodBottom: procedureBottom;
+procedureMethod:
+    GHOSTED? PRIVATE? PROCEDURE methodName OPEN_BRACKET paramsList? CLOSE_BRACKET NL
+        ordinaryStatement*
+    END PROCEDURE NL
+    ;
 
-copyMethodTop: COPY methodName OPEN_BRACKET paramsList CLOSE_BRACKET RETURNS type;
-copyMethodBottom: END COPY;
+abstractFunction: GHOSTED? ABSTRACT FUNCTION methodName OPEN_BRACKET paramsList? CLOSE_BRACKET RETURNS type NL;
+abstractProcedure: GHOSTED? ABSTRACT PROCEDURE methodName OPEN_BRACKET paramsList? CLOSE_BRACKET NL;
 
-abstractFunction: GHOSTED? ABSTRACT functionTop;
-abstractProcedure: GHOSTED? ABSTRACT procedureTop;
-// END RefLang_Frames
 
-// START Elan2_Fields
+commentMember: COMMENT? NL;
+// END Frames
+
+// START Fields
 identifier: NAME_STARTING_LC;
 assignable: identifierWithOptIndexes | propertyRef;
 
@@ -217,9 +162,9 @@ type: typeTuple | typeName | typeGeneric ;
 enumValuesList:  identifier (COMMA identifier)*;
 
 assertActual: expression;
-// END Elan2_Fields
+// END Fields
 
-// START Elan2_SubNodes
+// START SubNodes
 litValue: LIT_BOOLEAN | litInt | litFloat | litString | enumValue; // litRegExp
 litInt: LITERAL_INTEGER | LITERAL_BINARY | LITERAL_HEX;
 litFloat: LITERAL_FLOAT;
@@ -235,21 +180,20 @@ identifierWithOptIndexes: identifier index*;
 
 propertyRef: thisInstance DOT identifierWithOptIndexes;
 
-term:  
-    (thisInstance | chainable) (DOT chainable)*
-    ; 
-
-chainable:
-    (
-      identifier
-    | methodCall
-    | bracketedExpression
-    | tuple
-    | litValue
-    | list
-    )
-    index*
+expression:
+      newInstance
+    | unaryExpression
+    | term
+    | expression binaryOperator expression
+    | IF_ OPEN_BRACKET expression COMMA expression COMMA expression CLOSE_BRACKET 
+      // specified inline anticipating Python's `expression IF expression ( ELIF expression )* ELSE expression
     ;
+
+term: chainHead (DOT chainable)*; 
+
+chainHead: thisInstance | bracketedExpression  | tuple | litValue | list| chainable;
+
+chainable: ( identifier | methodCall ) index*;
 
 bracketedExpression: OPEN_BRACKET expression CLOSE_BRACKET;
 unaryExpression: (MINUS | NOT) term;
@@ -257,14 +201,8 @@ binaryExpression: term binaryOperator expression; // ? expression binaryOperator
 tuple: OPEN_BRACKET expression COMMA expression (COMMA expression)* CLOSE_BRACKET;
 methodCall: methodName OPEN_BRACKET argList? CLOSE_BRACKET;
 
-binaryOperator: 
-  EQUAL | NOT_EQUAL | GT | LT | GE | LE |
-  MULT | DIVIDE | PLUS | MINUS | AND | OR | MOD;
+binaryOperator: EQUAL | NOT_EQUAL | GT | LT | GE | LE |  MULT | DIVIDE | PLUS | MINUS | AND | OR | MOD;
      
-ifExpression: IF_ OPEN_BRACKET expression COMMA expression COMMA expression CLOSE_BRACKET;
-// END Elan2_SubNodes
-
-// START RefLang_SubNodes
 newInstance:  NEW type OPEN_BRACKET argList? CLOSE_BRACKET;
 
 paramDef: identifier AS type;
@@ -279,14 +217,6 @@ list: OPEN_SQ_BRACKET expression (COMMA expression)* CLOSE_SQ_BRACKET;
 
 interpolatedString: INTERPOLATED_STRING_PREFIX LITERAL_STRING;
 
-expression:
-      newInstance
-    | ifExpression
-    | unaryExpression
-    | term
-    | expression binaryOperator expression
-    | power
-    ;
-
 power: term POWER term;
-// END RefLang_SubNodes
+
+// END SubNodes
