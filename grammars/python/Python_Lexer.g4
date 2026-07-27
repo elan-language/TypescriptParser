@@ -54,11 +54,11 @@ TRY:           'try';
 VARIABLE:	   'variable';
 WHILE:         'while';
 
-INT_NAME:       'Int';
-FLOAT_NAME:     'Float';
-BOOL_NAME:      'Boolean';
-STRING_NAME:    'String';
-LIST_NAME:      'List';
+INT_NAME:       'int';
+FLOAT_NAME:     'float';
+BOOL_NAME:      'bool';
+STRING_NAME:    'str';
+LIST_NAME:      'list';
 
 COMMENT: '#' ~( '\r' | '\n' )*;
 LIT_BOOLEAN:    'true' | 'false'; // In other langs, the casing may be different
