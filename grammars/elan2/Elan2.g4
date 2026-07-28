@@ -47,12 +47,12 @@ enum: GHOSTED? ENUM typeName enumValuesList NL;
 
 concreteClass:
     GHOSTED? CLASS typeName (INHERITS typeName)? NL
-        (constructorMember | property | functionMethod | procedureMethod | copyMethod | commentMember)*
+        (constructorMember | property | functionMethod | procedureMethod | commentMember)*
     END CLASS NL;
 
 abstractClass:
     GHOSTED? ABSTRACT CLASS typeName (INHERITS typeName)? NL
-        (property | functionMethod | procedureMethod | copyMethod | abstractFunction | abstractProcedure | commentMember)*
+        (property | functionMethod | procedureMethod | abstractFunction | abstractProcedure | commentMember)*
     END CLASS NL;
 
 commentGlobal:
