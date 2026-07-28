@@ -269,9 +269,9 @@ newInstance:  NEW type OPEN_BRACKET argList? CLOSE_BRACKET;
 
 paramDef: identifier AS type;
 
-typeGeneric: typeName LT OF type (COMMA type)* GT;
+typeGeneric: typeName OPEN_SQ_BRACKET type (COMMA type)* CLOSE_SQ_BRACKET;
 
-typeTuple: OPEN_BRACKET type (COMMA type)+ CLOSE_BRACKET;
+typeTuple: 'tuple' OPEN_SQ_BRACKET type (COMMA type)+ CLOSE_SQ_BRACKET;
 
 lambda: LAMBDA (paramsList | argList ) ARROW expression;
 

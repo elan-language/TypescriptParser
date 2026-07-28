@@ -9,13 +9,13 @@ describe("python parse", () => {
  
 
   it("parses type", async () => {
-    const input = "Int"
+    const input = "int"
     const tree = parsePythonType(input);
     assert.strictEqual(tree.parser.syntaxErrorsCount, 0);
   });
 
   it("parses generic type", async () => {
-    const input = "Foo<of Int>"
+    const input = "Foo[int]"
     const tree = parsePythonType(input);
     assert.strictEqual(tree.parser.syntaxErrorsCount, 0);
   });
@@ -27,7 +27,7 @@ describe("python parse", () => {
   });
 
    it("parses tuple", async () => {
-    const input = "(Int, Int)"
+    const input = "tuple[int, int]"
     const tree = parsePythonType(input);
     assert.strictEqual(tree.parser.syntaxErrorsCount, 0);
   });
