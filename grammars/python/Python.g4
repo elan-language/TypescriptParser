@@ -218,7 +218,7 @@ paramDef: identifier COLON type;
 
 typeGeneric: typeName OPEN_SQ_BRACKET type (COMMA type)* CLOSE_SQ_BRACKET;
 
-typeTuple:  TUPLE OPEN_BRACKET type (COMMA type)+ CLOSE_BRACKET;
+typeTuple:  TUPLE OPEN_SQ_BRACKET type (COMMA type)+ CLOSE_SQ_BRACKET;
 
 lambda: LAMBDA argList COLON expression;
 
