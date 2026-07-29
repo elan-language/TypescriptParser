@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "browser": { "fs": false },
+  "browser": {
+    "fs": false
+  },
   "scripts": {
+    "formatg4": "antlr-format -c antlrformatrc -v grammars/**/*.g4",
     "build": "esbuild ./src/elan-elan-visitor.js --bundle --format=esm --outfile=out/antlr4-parser.js",
     "test": "mocha test/**/*.test.js",
     "start": "node --loader ts-node/esm index.js"
@@ -16,6 +19,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "^26.1.1",
+    "antlr-format-cli": "^1.2.8",
     "esbuild": "^0.28.1",
     "mocha": "^11.7.0"
   },
