@@ -5,7 +5,6 @@ lexer grammar Python_Lexer;
 
 // START Python_Lexer
   ABSTRACT_METHOD: '@abstractmethod';
-  ABSTRACT_PROCEDURE: '@abstractmethod';
   ASSERT_EQUAL: 'assertEqual';
   AS: 'as';
   DEF: 'def';
@@ -41,10 +40,7 @@ lexer grammar Python_Lexer;
   NOT: 'not';
 
   COMMENT_MARKER: '#';
-  LIST_START: '[';
-  LIST_END: ']';
   INTERPOLATED_STRING_PREFIX: 'f';
-  NEW_INSTANCE_PREFIX: ''; // i.e. there is no Python equivalent to 'new' keyword
 
   INT_NAME: 'int';
   FLOAT_NAME: 'float';
@@ -57,18 +53,9 @@ lexer grammar Python_Lexer;
   BINARY_PREFIX: '0b';
   HEX_PREFIX: '0x';
 
-  START_OF_GENERIC: '[';
-  END_OF_GENERIC: ']';
   THIS_INSTANCE: 'self';
-  OVERRIDES: '';
-  IMPLEMENTS: '';
 
   TUPLE: 'tuple';
-
-
-  EXPRESSION_KEYWORDS:  [this.LAMBDA, this.SELF, this.NOT];
-  DISALLOWED_IDENTIFIERS:  [this.SELF, this.TRUE, this.FALSE];
-
 // Common
 
 COMMENT: '#' ~( '\r' | '\n' )*;
