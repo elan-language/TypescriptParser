@@ -18,13 +18,13 @@ global:
     ; 
 
 main: 
-    DEF MAIN OPEN_BRACKET CLOSE_BRACKET COMMENT NL
+    DEF MAIN OPEN_BRACKET CLOSE_BRACKET CLOSE_BRACKET ARROW NONE COLON NL
        ordinaryStatement*
     COMMENT NL
     ;
 
 function: 
-    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW type COLON COMMENT NL
+    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW type COLON FUNCTION_ANNOTATION NL
         (letStatement | ordinaryStatement)* /* statements with side-effects prevented by editor and/or compiler */
         returnStatement
     COMMENT NL
@@ -37,12 +37,12 @@ test:
     ;
 
 procedure: 
-    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW NONE COLON COMMENT NL
+    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW NONE COLON PROCECDURE_ANNOTATION NL
         ordinaryStatement*
     COMMENT NL
     ;
 
-constant: identifier EQUAL constantValue COMMENT NL;
+constant: identifier EQUAL constantValue CONSTANT_ANNOTATION NL;
 
 // `<el-kw>${this.CLASS}</el-kw> ${frame.name.renderAsHtml()}(<el-type>Enum</el-type>):${frame.values.renderAsHtml()}`
 enum: CLASS typeName OPEN_BRACKET ENUM CLOSE_BRACKET COLON NL
@@ -50,12 +50,12 @@ enum: CLASS typeName OPEN_BRACKET ENUM CLOSE_BRACKET COLON NL
       COMMENT;  // No end comment, currently
 
 concreteClass:
-    CLASS typeName (OPEN_BRACKET typeName CLOSE_BRACKET)? NL
+    CLASS typeName (OPEN_BRACKET typeName CLOSE_BRACKET)? COLON CONCRETE_CLASS_ANNOTATION NL
         (constructorMember | property | functionMethod | procedureMethod | commentMember)*
     COMMENT NL;
 
 abstractClass:
-    CLASS typeName (OPEN_BRACKET typeName | ABC CLOSE_BRACKET) NL
+    CLASS typeName (OPEN_BRACKET typeName | ABC CLOSE_BRACKET) ABSTRACT_CLASS_ANNOTATION NL
         (property | functionMethod | procedureMethod | abstractFunction | abstractProcedure | commentMember)*
     COMMENT NL;
 
@@ -77,7 +77,12 @@ ordinaryStatement:
     | throwStatement 
     | commentStatement
    ;
-   
+
+print: PRINT OPEN_BRACKET expression? CLOSE_BRACKET NL;
+variableDefinition: identifier EQUAL expression VARIABLE_ANNOTATION NL; 
+assignment: assignable EQUAL expression ASSIGNMENT_ANNOTATION NL; 
+inputStatement: identifier EQUAL INPUT OPEN_BRACKET expression CLOSE_BRACKET INPUT_ANNOTATION NL; 
+
 ifStatement:
     IF expression COLON NL
         (elseIfClause | elseClause | ordinaryStatement)*
@@ -96,6 +101,8 @@ forLoop:
     COMMENT NL
     ;
 
+procedureCall: term CALL_ANNOTATION NL; // Compiler to check that term ends in a methodCall, and that the method is a procedure
+
 tryStatement:
     TRY NL
         ordinaryStatement*
@@ -104,20 +111,15 @@ tryStatement:
     COMMENT NL
     ;
 
-//self.assertEqual(actual, expected)
-assert: THIS_INSTANCE DOT ASSERT_EQUAL OPEN_BRACKET assertActual COMMA expression CLOSE_BRACKET NL; 
-letStatement: identifier EQUAL expression COMMENT NL;
-print: PRINT OPEN_BRACKET expression? CLOSE_BRACKET NL;
-variableDefinition: identifier EQUAL expression COMMENT NL; 
-assignment: assignable EQUAL expression COMMENT NL; 
-inputStatement: identifier EQUAL INPUT OPEN_BRACKET expression CLOSE_BRACKET NL; 
-procedureCall: term COMMENT NL; // Compiler to check that term ends in a methodCall, and that the method is a procedure
 throwStatement: RAISE typeName OPEN_BRACKET litString CLOSE_BRACKET NL;
+commentStatement: COMMENT NL; 
+
+assert: THIS_INSTANCE DOT ASSERT_EQUAL OPEN_BRACKET assertActual COMMA expression CLOSE_BRACKET NL; 
+letStatement: identifier EQUAL expression LET_ANNOTATION NL;
 returnStatement: RETURN expression NL; // not ghostable
-elseIfClause: ELIF expression COLON NL;
+elseIfClause: ELIF expression COLON ELSE_IF_ANNOTATION NL;
 elseClause: ELSE COLON NL;
 catchStatement: EXCEPT typeName AS identifier NL;
-commentStatement: COMMENT NL; 
 
 // Members
 constructorMember:
@@ -127,17 +129,17 @@ constructorMember:
     COMMENT NL
     ;
 
-property: identifier COLON type NL;
+property: identifier COLON type PROPERTY_ANNOTATION NL;
 
 functionMethod:
-    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW type COLON COMMENT NL
+    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW type COLON FUNCTION_METHOD_ANNOTATION NL
         (letStatement | ordinaryStatement)*
         returnStatement
     COMMENT NL
     ;
 
 procedureMethod:
-    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW NONE COLON COMMENT NL
+    DEF methodName OPEN_BRACKET paramsList? CLOSE_BRACKET ARROW NONE COLON PROCEDURE_METHOD_ANNOTATION NL
         ordinaryStatement*
     COMMENT NL
     ;

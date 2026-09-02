@@ -56,9 +56,23 @@ lexer grammar Python_Lexer;
   THIS_INSTANCE: 'self';
 
   TUPLE: 'tuple';
-// Common
 
-COMMENT: '#' ~( '\r' | '\n' )*;
+FUNCTION_ANNOTATION: COMMENT_MARKER 'function';
+PROCECDURE_ANNOTATION: COMMENT_MARKER 'procedure';
+CONSTANT_ANNOTATION: COMMENT_MARKER 'constant';
+CONCRETE_CLASS_ANNOTATION: COMMENT_MARKER 'concrete class';
+ABSTRACT_CLASS_ANNOTATION: COMMENT_MARKER 'abstract class';
+VARIABLE_ANNOTATION: COMMENT_MARKER 'variable definition';
+ASSIGNMENT_ANNOTATION: COMMENT_MARKER 'assignment';
+INPUT_ANNOTATION: COMMENT_MARKER 'input statement';
+CALL_ANNOTATION: COMMENT_MARKER 'procedure call';
+LET_ANNOTATION: COMMENT_MARKER 'let';
+ELSE_IF_ANNOTATION: COMMENT_MARKER 'else if';
+PROPERTY_ANNOTATION: COMMENT_MARKER 'property';
+FUNCTION_METHOD_ANNOTATION: COMMENT_MARKER 'function method';
+PROCEDURE_METHOD_ANNOTATION: COMMENT_MARKER 'procedure method';
+
+COMMENT: COMMENT_MARKER ~( '\r' | '\n' )*;
 LIT_BOOLEAN:    'true' | 'false'; // In other langs, the casing may be different
 
 POWER:			'^';
