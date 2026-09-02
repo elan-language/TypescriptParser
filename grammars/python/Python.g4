@@ -44,8 +44,7 @@ procedure:
 
 constant: identifier EQUAL constantValue CONSTANT_ANNOTATION NL;
 
-// `<el-kw>${this.CLASS}</el-kw> ${frame.name.renderAsHtml()}(<el-type>Enum</el-type>):${frame.values.renderAsHtml()}`
-enum: CLASS typeName OPEN_BRACKET ENUM CLOSE_BRACKET COLON NL
+enum: CLASS typeName OPEN_BRACKET ENUM CLOSE_BRACKET COLON ENUM_ANNOTATION NL
         enumValuesList NL
       COMMENT;  // No end comment, currently
 
