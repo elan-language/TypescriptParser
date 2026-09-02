@@ -46,7 +46,7 @@ constant: identifier EQUAL constantValue CONSTANT_ANNOTATION NL;
 
 enum: CLASS typeName OPEN_BRACKET ENUM CLOSE_BRACKET COLON ENUM_ANNOTATION NL
         enumValuesList NL
-      COMMENT;  // No end comment, currently
+      COMMENT;
 
 concreteClass:
     CLASS typeName (OPEN_BRACKET typeName CLOSE_BRACKET)? COLON CONCRETE_CLASS_ANNOTATION NL
